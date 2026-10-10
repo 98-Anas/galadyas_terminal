@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mindas-terminal"
+version = "0.0.1"
+description = "A universal terminal for Windows and Linux, with bash first everywhere"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Anas Ayman Elgallad" }]
+keywords = ["terminal", "tui", "textual", "bash", "conpty", "devops", "hpc"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Terminals :: Terminal Emulators/X Terminals",
+]
+dependencies = [
+    "textual>=3.0",
+    "pyte>=0.8",
+    "pywinpty>=2.0; sys_platform == 'win32'",
+    "ptyprocess>=0.7; sys_platform != 'win32'",
+]
+
+[project.urls]
+Repository = "https://github.com/98-Anas/mindas_terminal"
+
+[project.scripts]
+mindas-terminal = "mindas_terminal.app:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "psutil>=5.9"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mindas_terminal"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
