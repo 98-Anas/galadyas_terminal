@@ -65,6 +65,11 @@ def arrange(procs: list[Proc], sort: str = "cpu", reverse: bool = True, query: s
     return sorted(rows, key=key, reverse=reverse)
 
 
+def total_cpu(procs: list[Proc], cores: int) -> float:
+    """Machine CPU use from the same samples as the table, so header and rows always agree."""
+    return min(sum(p.cpu for p in procs) / max(cores, 1), 100.0)
+
+
 def descendants(procs: list[Proc], roots: set[int]) -> set[int]:
     """The roots and every process below them (what is running inside each terminal pane)."""
     children: dict[int, list[int]] = {}
@@ -100,6 +105,8 @@ def collect(gpu: dict[int, int] | None = None) -> list[Proc]:
     out = []
     for p in psutil.process_iter(_FIELDS):          # psutil caches Process objects, so cpu_percent is a delta
         i = p.info
+        if i.get("pid") == 0:                        # the idle pseudo-process: idle time, not a program
+            continue
         try:
             cmd = " ".join(i.get("cmdline") or []) or (i.get("name") or "")
             mi = i.get("memory_info")

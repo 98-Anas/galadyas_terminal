@@ -33,6 +33,11 @@ def test_collect_sees_this_process():
     assert any(p.pid == os.getpid() for p in tasks.collect())
 
 
+def test_total_cpu_is_bounded():
+    assert tasks.total_cpu(PROCS, 4) == (1.0 + 90.0 + 5.0 + 0.1) / 4
+    assert tasks.total_cpu([P(1, cpu=900.0)], 4) == 100.0
+
+
 def test_human():
     assert tasks.human(512) == "512B"
     assert tasks.human(3 * 1024**3) == "3.0G"

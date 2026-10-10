@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from dataclasses import replace
 
 from rich.text import Text
 from textual import work
@@ -58,23 +59,42 @@ class TaskManager(Screen[None]):
 
     def on_mount(self) -> None:
         self.query_one(DataTable).focus()
+        self._measured = False
+        self._busy = False
         self.refresh_data()
-        self.set_interval(self._interval, self.refresh_data)
 
-    @work(thread=True, exclusive=True, group="tasks")
     def refresh_data(self) -> None:
-        if not self._procs:
-            # CPU use is a difference between two samples: show the list at once, then the measured values.
-            first = tasks.collect()
-            self.app.call_from_thread(self._show, first, tasks.system(with_gpu=False), True)
-            time.sleep(0.8)
-        gpu = tasks.gpu_processes()
-        procs = tasks.collect(gpu)
-        sysinfo = tasks.system()
-        self.app.call_from_thread(self._show, procs, sysinfo)
+        """Start a collection unless one is running; the next one is scheduled when this one finishes,
+        so a slow machine is never asked to collect twice at once."""
+        if not self._busy:
+            self._busy = True
+            self._collect()
+
+    @work(thread=True, group="tasks")
+    def _collect(self) -> None:
+        try:
+            if not self._measured:
+                # CPU use is a difference between two samples: show the list at once, then measured values.
+                first = tasks.collect()
+                self.app.call_from_thread(self._show, first, tasks.system(with_gpu=False), True)
+                time.sleep(0.8)
+            gpu = tasks.gpu_processes()
+            procs = tasks.collect(gpu)
+            sysinfo = tasks.system()
+            self._measured = True
+            self.app.call_from_thread(self._show, procs, sysinfo)
+        finally:
+            self.app.call_from_thread(self._done)
+
+    def _done(self) -> None:
+        self._busy = False
+        if self.is_attached:
+            self.set_timer(self._interval, self.refresh_data)
 
     def _show(self, procs: list[tasks.Proc], s: tasks.System, measuring: bool = False) -> None:
         self._procs = procs
+        if not measuring:
+            s = replace(s, cpu=tasks.total_cpu(procs, s.cores))
         ram = s.ram_used / s.ram_total * 100 if s.ram_total else 0
         lines = [
             f"CPU  {_bar(s.cpu)} {s.cpu:5.1f}%  ({s.cores} cores)"
