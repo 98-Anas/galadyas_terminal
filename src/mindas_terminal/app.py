@@ -559,7 +559,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.theme:
         settings = config.replace(settings, theme=args.theme)
     scrollback = args.scrollback if args.scrollback is not None else settings.scrollback
-    MindasTerminal(shell, prefix=args.prefix or settings.prefix, scrollback=max(scrollback, 0), cwd=args.cwd,
+    MindasTerminal(shell, prefix=args.prefix or settings.prefix, scrollback=min(max(scrollback, 0), 1_000_000), cwd=args.cwd,
                    available=found, profile=args.profile, settings=settings).run()
     return 0
 

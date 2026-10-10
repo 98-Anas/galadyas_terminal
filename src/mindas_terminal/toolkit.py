@@ -215,3 +215,24 @@ def quote(value: str) -> str:
     if value and all(c in _SAFE for c in value):
         return value
     return "'" + value.replace("'", "") + "'"     # a quote inside would end the quoting; it is dropped
+
+
+def fill(command: str, name: str, value: str) -> str:
+    """Replace every <name> with value, safely.
+
+    Inside existing quotes ('<file>' in SQL, "<container>"), the value is inserted without characters that
+    could end those quotes; elsewhere it is quoted as one argument.
+    """
+    clean = "".join(c for c in value if c.isprintable())
+    token = f"<{name}>"
+    out, i = [], 0
+    while (j := command.find(token, i)) != -1:
+        before = command[j - 1] if j else ""
+        after = command[j + len(token)] if j + len(token) < len(command) else ""
+        if before in "'\"" and after == before:
+            out.append(command[i:j] + clean.replace(before, "").replace("\\", ""))
+        else:
+            out.append(command[i:j] + quote(clean))
+        i = j + len(token)
+    out.append(command[i:])
+    return "".join(out)

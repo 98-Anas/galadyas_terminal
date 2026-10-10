@@ -33,3 +33,12 @@ def test_aliases_unique_and_documented():
     assert len(names) == len(set(names)) and len(names) >= 60
     assert all(a.help and a.group in aliases.GROUPS for a in aliases.ALIASES)
     assert "malias()" in aliases.bash() and "function mkcd" in aliases.powershell()
+
+
+def test_fill_respects_existing_quotes():
+    assert toolkit.fill("grep -rn '<text>' <dir>", "text", "disk full") == "grep -rn 'disk full' <dir>"
+    assert toolkit.fill("grep -rn '<text>' <dir>", "text", "it's") == "grep -rn 'its' <dir>"
+    sql = toolkit.fill("duckdb -c \"SELECT * FROM '<file>' LIMIT 20\"", "file", "my data.csv")
+    assert sql == "duckdb -c \"SELECT * FROM 'my data.csv' LIMIT 20\""
+    assert toolkit.fill("nc -zv <host> <port>", "host", "a b") == "nc -zv 'a b' <port>"
+    assert toolkit.fill("ping <host> <host>", "host", "x") == "ping x x"

@@ -63,15 +63,17 @@ class TaskManager(Screen[None]):
 
     @work(thread=True, exclusive=True, group="tasks")
     def refresh_data(self) -> None:
-        gpu = tasks.gpu_processes()
-        if not self._procs:                       # CPU use is a difference: take a first sample, then measure
-            tasks.collect(gpu)
+        if not self._procs:
+            # CPU use is a difference between two samples: show the list at once, then the measured values.
+            first = tasks.collect()
+            self.app.call_from_thread(self._show, first, tasks.system(with_gpu=False), True)
             time.sleep(0.8)
+        gpu = tasks.gpu_processes()
         procs = tasks.collect(gpu)
         sysinfo = tasks.system()
         self.app.call_from_thread(self._show, procs, sysinfo)
 
-    def _show(self, procs: list[tasks.Proc], s: tasks.System) -> None:
+    def _show(self, procs: list[tasks.Proc], s: tasks.System, measuring: bool = False) -> None:
         self._procs = procs
         ram = s.ram_used / s.ram_total * 100 if s.ram_total else 0
         lines = [
@@ -83,6 +85,8 @@ class TaskManager(Screen[None]):
         for name, util, used, total in s.gpus:
             lines.append(f"GPU  {_bar(util)} {util:5.1f}%  {used} / {total} MiB  {name}")
         mode = "this terminal only" if self.only_terminal else "all processes"
+        if measuring:
+            lines.append("measuring CPU and GPU use...")
         lines.append(f"{len(procs)} processes   sort: {self.sort} {'desc' if self.reverse else 'asc'}   "
                      f"showing: {mode}" + (f"   filter: {self.filter_text}" if self.filter_text else ""))
         self.query_one("#tm-head", Static).update("\n".join(lines))

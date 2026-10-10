@@ -22,7 +22,7 @@ class ToolkitScreen(ModalScreen[str | None]):
     ToolkitScreen { align: center middle; }
     #tk { width: 110; max-width: 96%; height: 85%; background: $surface; border: round $accent; padding: 0 1; }
     #tk-title { color: $accent; text-style: bold; height: 1; margin-top: 1; }
-    #tk Input { width: 100%; margin: 0 0 1 0; }
+    #tk Input { width: 1fr; max-width: 100%; margin: 0 0 1 0; }
     #tk-list { height: 1fr; border: none; background: $surface; }
     #tk-detail { height: auto; max-height: 6; color: $text-muted; border-top: solid $panel; padding-top: 0; }
     """
@@ -54,7 +54,7 @@ class ToolkitScreen(ModalScreen[str | None]):
             line = Text()
             line.append(f"{toolkit.FIELDS[t.field][:24]:<25}", style="#b18cff")
             line.append(f"{t.title[:46]:<47}", style="bold")
-            width = max(self.size.width - 80, 20)
+            width = max(ol.size.width - 76, 16)       # field 25 + title 47 + scrollbar and padding
             cmd = t.command if len(t.command) <= width else t.command[:width - 1] + "…"
             line.append(cmd, style="#5eead4")
             ol.add_option(Option(line))
@@ -117,6 +117,6 @@ class ToolkitScreen(ModalScreen[str | None]):
             if value is None:
                 return
             value = value.strip()
-            self._ask(command.replace(f"<{name}>", toolkit.quote(value)) if value else command, rest)
+            self._ask(toolkit.fill(command, name, value) if value else command, rest)
 
         self.app.push_screen(Prompt(f"Value for <{name}>", placeholder=f"{name} (leave empty to edit later)"), got)

@@ -41,7 +41,12 @@ async def run(shell_name: str, steps) -> None:
             await step(app, pane, pilot)
 
 
+FAILED: list[str] = []
+
+
 def check(label: str, ok: bool, detail: str = "") -> None:
+    if not ok:
+        FAILED.append(label)
     print(f"{'PASS' if ok else 'FAIL'}  {label}  {detail}")
 
 
@@ -150,3 +155,4 @@ async def main() -> None:
 
 
 asyncio.run(main())
+sys.exit(1 if FAILED else 0)
