@@ -3,10 +3,30 @@
 from __future__ import annotations
 
 import os
-import shutil
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+
+
+def safe_which(name: str) -> str | None:
+    """Find a program on PATH without ever using the current folder.
+
+    shutil.which on Windows searches the current folder first, so a program planted in a repository you
+    open could run instead of the real one. Only absolute PATH entries are trusted here.
+    """
+    exts = [""]
+    if sys.platform == "win32" and not os.path.splitext(name)[1]:
+        exts = [e.lower() for e in os.environ.get("PATHEXT", ".EXE;.CMD;.BAT;.COM").split(";") if e]
+    cwd = os.path.normcase(os.path.abspath(os.getcwd()))
+    for d in os.environ.get("PATH", "").split(os.pathsep):
+        d = d.strip().strip('"')
+        if not d or not os.path.isabs(d) or os.path.normcase(os.path.abspath(d)) == cwd:
+            continue
+        for ext in exts:
+            candidate = os.path.join(d, name + ext)
+            if os.path.isfile(candidate) and (sys.platform == "win32" or os.access(candidate, os.X_OK)):
+                return candidate
+    return None
 
 
 @dataclass(frozen=True)
@@ -22,7 +42,7 @@ WINDOWS_BASH_CANDIDATES = (
 )
 
 
-def detect(platform: str = sys.platform, exists=os.path.exists, which=shutil.which) -> list[Shell]:
+def detect(platform: str = sys.platform, exists=os.path.exists, which=safe_which) -> list[Shell]:
     """Available shells, best first: bash is preferred so navigation works the same on Windows and Linux."""
     found: list[Shell] = []
     if platform == "win32":

@@ -15,6 +15,8 @@ class Pty(Protocol):
     def resize(self, rows: int, cols: int) -> None: ...
     def alive(self) -> bool: ...
     def close(self) -> None: ...
+    @property
+    def pid(self) -> int | None: ...
 
 
 class WindowsPty:
@@ -44,9 +46,15 @@ class WindowsPty:
         self._p.set_size(cols, rows)
 
     def alive(self) -> bool:
-        return self._p.isalive()
+        return self._p is not None and self._p.isalive()
+
+    @property
+    def pid(self) -> int | None:
+        return self._p.pid if self._p is not None else None
 
     def close(self) -> None:
+        if self._p is None:
+            return
         try:
             self._p.cancel_io()
         except Exception:  # noqa: BLE001 - closing must never raise
@@ -71,6 +79,10 @@ class PosixPty:
 
     def alive(self) -> bool:
         return self._p.isalive()
+
+    @property
+    def pid(self) -> int | None:
+        return self._p.pid
 
     def close(self) -> None:
         try:

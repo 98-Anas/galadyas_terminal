@@ -72,6 +72,7 @@ name = "mindas-terminal"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
+    { name = "psutil" },
     { name = "ptyprocess", marker = "sys_platform != 'win32'" },
     { name = "pyte" },
     { name = "pywinpty", marker = "sys_platform == 'win32'" },
@@ -87,6 +88,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "psutil", specifier = ">=5.9" },
     { name = "ptyprocess", marker = "sys_platform != 'win32'", specifier = ">=0.7" },
     { name = "pyte", specifier = ">=0.8" },
     { name = "pywinpty", marker = "sys_platform == 'win32'", specifier = ">=2.0" },
