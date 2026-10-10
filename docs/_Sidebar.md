@@ -9,6 +9,7 @@
 **Features**
 
 - [Tabs and Panes](Tabs-and-Panes)
+- [Autocomplete](Autocomplete)
 - [Copy Mode](Copy-Mode)
 - [Task Manager](Task-Manager)
 - [Toolkits](Toolkits)

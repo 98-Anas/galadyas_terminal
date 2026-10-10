@@ -3,6 +3,25 @@
 All notable changes are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] - 2026-10-11
+
+Smarter, smoother, still simple: nothing new to learn.
+
+### Added
+
+- Autocomplete: a faint suggestion appears after what you type, from your own history (frequent and recent
+  first), common tools and toolkit commands. Right arrow or End accepts it, Alt+Right accepts one word.
+- "Did you mean": after `command not found`, the closest known command is offered on the empty prompt;
+  Right arrow accepts it.
+- Remembered history for autocomplete, with secret filtering, private file permissions, a
+  `remember_history` setting and a *Forget history* command.
+- Autocomplete page in the manual and the wiki.
+
+### Changed
+
+- Smoother rendering: only the rows that changed are repainted, which keeps many panes fluid.
+- Screenshots now come from a neutral demo environment.
+
 ## [0.1.0] - 2026-10-11
 
 First usable version.

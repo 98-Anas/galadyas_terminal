@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mindas-terminal"
-version = "0.1.0"
+version = "0.2.0"
 description = "A universal terminal for Windows and Linux, with bash first everywhere"
 readme = "README.md"
 requires-python = ">=3.11"

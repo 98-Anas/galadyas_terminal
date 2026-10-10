@@ -3,8 +3,6 @@
 `prefix t` opens a full-screen process view. It refreshes every two seconds and never blocks the terminals
 behind it.
 
-![Task manager](images/task-manager.png)
-
 ## What it shows
 
 **Header:** CPU (all cores) with load average on Linux, RAM and swap, and one line per NVIDIA GPU with

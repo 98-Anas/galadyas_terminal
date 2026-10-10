@@ -7,7 +7,7 @@ from mindas_terminal.app import MindasTerminal
 from mindas_terminal.config import Settings
 from mindas_terminal.widget import TerminalPane
 
-NO_HOME = Settings(show_home=False)
+NO_HOME = Settings(show_home=False, remember_history=False)
 
 SHELL = shells.detect()[0]
 pytestmark = pytest.mark.skipif(not SHELL, reason="no shell")
@@ -106,7 +106,7 @@ async def test_toolkit_inserts_without_running():
 
 
 async def test_home_window_opens_a_shell_by_click():
-    app = MindasTerminal(SHELL)
+    app = MindasTerminal(SHELL, settings=Settings(remember_history=False))
     async with app.run_test(size=(120, 40)) as pilot:
         await pilot.pause()
         assert type(app.screen).__name__ == "HomeScreen"
@@ -117,7 +117,7 @@ async def test_home_window_opens_a_shell_by_click():
 
 
 async def test_home_tools_and_manual_navigation():
-    app = MindasTerminal(SHELL)
+    app = MindasTerminal(SHELL, settings=Settings(remember_history=False))
     async with app.run_test(size=(120, 40)) as pilot:
         await pilot.pause()
         await pilot.click("#tool-manual")
@@ -149,3 +149,18 @@ async def test_status_bar_words_are_clickable():
         import re
         for action in re.findall(r"@click=app\.(\w+)", STATUS_ACTIONS):
             assert hasattr(app, f"action_{action}"), action
+
+
+async def test_autocomplete_suggests_and_accepts():
+    app = MindasTerminal(SHELL, settings=NO_HOME)
+    async with app.run_test(size=(120, 30)) as pilot:
+        await asyncio.sleep(1.0)
+        app.history.add("echo AUTOCOMPLETE-WORKS")
+        app._ranked = None
+        pane = app.current_pane()
+        await pilot.press(*"echo AUTO")
+        await pilot.pause()
+        assert pane.ghost == "COMPLETE-WORKS"
+        await pilot.press("right", "enter")
+        await wait(pane, "AUTOCOMPLETE-WORKS\n".strip())
+        assert pane.ghost == "" and pane.tracker.text == ""

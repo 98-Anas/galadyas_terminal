@@ -17,10 +17,11 @@ from rich.segment import Segment
 from rich.style import Style
 from textual import events
 from textual.message import Message
+from textual.geometry import Region
 from textual.strip import Strip
 from textual.widget import Widget
 
-from . import keys, paste
+from . import keys, paste, suggest
 from .copymode import CopyMode
 from .pty import Pty, spawn
 from .screen import BRACKETED_PASTE, DECCKM, TerminalScreen
@@ -30,6 +31,7 @@ _NAMED = {"brown": "yellow", "brightbrown": "bright_yellow"}
 SELECT = Style(reverse=True)
 MATCH = Style(bgcolor="#fbbf24", color="#070b1a")
 BADGE = Style(bgcolor="#7aa2ff", color="#070b1a", bold=True)
+GHOST = Style(color="#5b6690", italic=True)
 
 
 @lru_cache(maxsize=4096)
@@ -99,6 +101,13 @@ class TerminalPane(Widget, can_focus=True):
         self._rows: list[dict] = []
         self.search_prompt: str | None = None      # text typed after / or ?
         self._search_forward = True
+        # autocomplete and smart hints
+        self.tracker = suggest.LineTracker()
+        self.ghost = ""                            # suggested text after the cursor (drawn faint)
+        self._fix = ""                             # corrected command after "command not found"
+        self._check_at = 0.0                       # when to look for "command not found"
+        self._last_command = ""
+        self._cursor_row = 0
 
     # info
     @property
@@ -160,7 +169,7 @@ class TerminalPane(Widget, can_focus=True):
         if self._dirty:
             self._dirty = False
             if self.copy is None:
-                self.refresh()
+                self._repaint_changed()
             title = self._screen.title
             if title != self._title:
                 self._title = title
@@ -169,6 +178,76 @@ class TerminalPane(Widget, can_focus=True):
         if self.exited and not self._exit_reported:
             self._exit_reported = True
             self.post_message(self.Exited(self))
+        if self._check_at and time.monotonic() >= self._check_at:
+            self._check_at = 0.0
+            self._look_for_not_found()
+
+    def _repaint_changed(self) -> None:
+        """Repaint only the rows that changed (plus the old and new cursor rows): smooth with many panes."""
+        with self._lock:
+            screen = self._screen
+            rows = set(screen.dirty)
+            screen.dirty.clear()
+            cursor = screen.cursor.y
+        rows.update((self._cursor_row, cursor))
+        self._cursor_row = cursor
+        if len(rows) > screen.lines // 2:
+            self.refresh()
+            return
+        width = self.size.width
+        self.refresh(*(Region(0, y, width, 1) for y in rows if 0 <= y < screen.lines))
+
+    # autocomplete
+    def _update_ghost(self) -> None:
+        old = self.ghost
+        text = self.tracker.text
+        self.ghost = ""
+        if text is not None and self.copy is None and not self._screen.in_alt_screen:
+            if text == "" and self._fix:
+                self.ghost = self._fix
+            else:
+                provider = getattr(self.app, "completions", None)
+                hist, extra = provider() if provider else ([], ())
+                best = suggest.suggest(text, hist, extra)
+                self.ghost = best[len(text):] if best else ""
+        if self.ghost != old:
+            self.refresh(Region(0, self._screen.cursor.y, self.size.width, 1))
+
+    def _accept_ghost(self, word_only: bool) -> bool:
+        if not self.ghost or self.tracker.text is None:
+            return False
+        text = self.tracker.text
+        part = suggest.next_word(text, text + self.ghost) if word_only else self.ghost
+        self.write(part)
+        self.tracker.text = text + part
+        self._update_ghost()
+        return True
+
+    def _committed(self, line: str) -> None:
+        self._fix = ""
+        self._last_command = line.strip()
+        if line.strip():
+            remember = getattr(self.app, "remember", None)
+            if remember:
+                remember(line)
+            self._check_at = time.monotonic() + 0.6
+
+    def _look_for_not_found(self) -> None:
+        if not self._last_command:
+            return
+        word = self._last_command.split()[0]
+        with self._lock:
+            text = "\n".join(self._screen.display[max(self._screen.cursor.y - 4, 0):self._screen.cursor.y + 1])
+        missing = suggest.not_found(text)
+        if missing != word:
+            return
+        provider = getattr(self.app, "completions", None)
+        hist, extra = provider() if provider else ([], ())
+        fix = suggest.did_you_mean(word, suggest.known_programs(hist, extra))
+        if fix:
+            self._fix = fix + self._last_command[len(word):]
+            self.app.notify(f"Did you mean:  {self._fix}\nPress Right arrow to use it.", timeout=6)
+            self._update_ghost()
 
     # output to the program
     def write(self, data: str) -> None:
@@ -189,6 +268,12 @@ class TerminalPane(Widget, can_focus=True):
                 lambda ok: ok and self.paste_text(text, confirmed=True))
             return
         self.write(paste.prepare(text, bracketed))
+        clean = paste.sanitize(text)
+        if "\n" in clean or self.tracker.text is None:
+            self.tracker.lost()
+        else:
+            self.tracker.text += clean
+        self._update_ghost()
 
     # input
     def on_key(self, event: events.Key) -> None:
@@ -205,9 +290,16 @@ class TerminalPane(Widget, can_focus=True):
             if self.copy:
                 self.copy.page(-1)
             return
+        if event.key in ("right", "end", "alt+right") and self._accept_ghost(word_only=event.key == "alt+right"):
+            return
         data = keys.encode(event.key, event.character, DECCKM in self._screen.mode)
         if data is not None:
             self.write(data)
+            if self._screen.in_alt_screen:
+                self.tracker.lost()
+            elif (line := self.tracker.typed(data)) is not None:
+                self._committed(line)
+            self._update_ghost()
 
     def on_paste(self, event: events.Paste) -> None:
         event.stop()
@@ -348,9 +440,11 @@ class TerminalPane(Widget, can_focus=True):
             screen = self._screen
             if y >= screen.lines:
                 return Strip.blank(width)
-            cursor_x = screen.cursor.x if (y == screen.cursor.y and not screen.cursor.hidden
-                                           and self.has_focus) else -1
-            return self._strip(screen.buffer[y], screen.columns, lambda x: SELECT if x == cursor_x else None)
+            on_cursor_row = y == screen.cursor.y and self.has_focus
+            cursor_x = screen.cursor.x if on_cursor_row and not screen.cursor.hidden else -1
+            ghost = self.ghost if on_cursor_row else ""
+            return self._strip(screen.buffer[y], screen.columns, lambda x: SELECT if x == cursor_x else None,
+                               ghost, screen.cursor.x)
 
     def _render_copy_line(self, y: int, width: int) -> Strip:
         cm = self.copy
@@ -375,19 +469,24 @@ class TerminalPane(Widget, can_focus=True):
             strip = Strip.join([strip.crop(0, max(width - len(badge), 0)), Strip([Segment(badge, BADGE)])])
         return strip
 
-    def _strip(self, row: dict, columns: int, overlay) -> Strip:
+    def _strip(self, row: dict, columns: int, overlay, ghost: str = "", ghost_x: int = 0) -> Strip:
         default = self._screen.default_char
         base = self._base_style()
         cache = self._combined
+        ghost_style = base + GHOST
         segments: list[Segment] = []
         run_text: list[str] = []
         run_style: Style | None = None
         for x in range(columns):
             ch = row.get(x, default)
-            attrs = (ch.fg, ch.bg, ch.bold, ch.italics, ch.underscore, ch.reverse)
-            style = cache.get(attrs)
-            if style is None:
-                style = cache[attrs] = base + _style(*attrs)
+            data = ch.data
+            if ghost and ghost_x <= x < ghost_x + len(ghost) and data == " ":
+                data, style = ghost[x - ghost_x], ghost_style      # suggestion, drawn only on empty cells
+            else:
+                attrs = (ch.fg, ch.bg, ch.bold, ch.italics, ch.underscore, ch.reverse)
+                style = cache.get(attrs)
+                if style is None:
+                    style = cache[attrs] = base + _style(*attrs)
             extra = overlay(x)
             if extra is not None:
                 style = style + extra
@@ -395,7 +494,7 @@ class TerminalPane(Widget, can_focus=True):
                 segments.append(Segment("".join(run_text), run_style))
                 run_text = []
             run_style = style
-            run_text.append(ch.data)          # "" after a wide character: it already covers two cells
+            run_text.append(data)             # "" after a wide character: it already covers two cells
         if run_text:
             segments.append(Segment("".join(run_text), run_style))
         return Strip(segments, columns)

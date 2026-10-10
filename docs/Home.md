@@ -17,6 +17,7 @@ vim-style copy mode, a task manager with GPU use, and offline toolkits of curate
 | Page | What it covers |
 |---|---|
 | [Tabs and Panes](Tabs-and-Panes) | The prefix key, splits, zoom, moving between panes |
+| [Autocomplete](Autocomplete) | Suggestions as you type, history, "did you mean" |
 | [Copy Mode](Copy-Mode) | Scrollback, vim motions, search, selection, clipboard |
 | [Task Manager](Task-Manager) | Processes, CPU, memory and GPU, safe ending of processes |
 | [Toolkits](Toolkits) | Searching curated commands, placeholders, profiles |

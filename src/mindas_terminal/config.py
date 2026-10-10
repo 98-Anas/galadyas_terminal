@@ -23,6 +23,7 @@ class Settings:
     alias_style: str = "linux"         # linux: Linux command names in PowerShell too; native: PowerShell only
     confirm_multiline_paste: bool = True
     show_home: bool = True             # start with the home window
+    remember_history: bool = True      # keep commands for autocomplete (secrets are never stored)
 
 
 THEMES = ("space", "light", "contrast")
@@ -89,6 +90,20 @@ def dumps(s: Settings) -> str:
             escaped = "".join(c for c in str(value) if c.isprintable()).replace("\\", "\\\\").replace('"', '\\"')
             lines.append(f'{key} = "{escaped}"')
     return "\n".join(lines) + "\n"
+
+
+def history_path() -> Path:
+    return path().parent / "history.tsv"
+
+
+def save_private(target: Path, text: str) -> None:
+    """Write atomically, readable by the owner only (history can reveal what you work on)."""
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp = target.with_suffix(".tmp")
+    fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
+    os.replace(tmp, target)
 
 
 def save(s: Settings) -> Path:

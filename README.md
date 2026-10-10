@@ -1,7 +1,7 @@
 # mindas terminal
 
 ![status: work in progress](https://img.shields.io/badge/status-work%20in%20progress-orange)
-![version 0.1.0](https://img.shields.io/badge/version-0.1.0-blue)
+![version 0.1.0](https://img.shields.io/badge/version-0.2.0-blue)
 ![license: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![platforms: Windows | Linux](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux-informational)
 ![python 3.11+](https://img.shields.io/badge/python-3.11%2B-informational)
@@ -28,6 +28,8 @@ IT support and project management.
 
 | | |
 |---|---|
+| **Autocomplete** | Suggestions as you type from your history, common tools and toolkits; Right arrow accepts |
+| **Smart hints** | "Did you mean" after a mistyped command, ready to accept with one key |
 | **Shells** | Git Bash, MSYS2, WSL, PowerShell 7, Windows PowerShell, cmd on Windows; bash, zsh, fish, sh on Linux |
 | **Tabs and panes** | Prefix key (Ctrl+B), split right or down, move with arrows or `h j k l`, zoom, rename, close safely |
 | **Copy mode** | 10,000 lines of scrollback per pane, vim motions, smartcase search, character and line selection, clipboard |
@@ -49,9 +51,9 @@ IT support and project management.
 |---|---|
 | ![Copy mode](docs/images/copy-mode.png) | ![Toolkits](docs/images/toolkits.png) |
 
-| Task manager | Light theme and keyboard help |
+| Autocomplete | Light theme and keyboard help |
 |---|---|
-| ![Task manager](docs/images/task-manager.png) | ![Help in the light theme](docs/images/help-light.png) |
+| ![Autocomplete](docs/images/autocomplete.png) | ![Help in the light theme](docs/images/help-light.png) |
 
 ## Install
 
@@ -144,7 +146,7 @@ Measured with 100,000 lines through bash: 10,000 to 15,500 lines per second on W
 git clone https://github.com/98-Anas/mindas_terminal && cd mindas_terminal
 uv sync
 uv run pytest                          # unit, screen-model and app tests with real shells
-uv run python spike/check.py           # end-to-end checks: throughput, vim, Ctrl+C, resize
+uv run python tools/e2e.py             # end-to-end checks: throughput, vim, Ctrl+C, resize
 uv run python tools/gen_docs.py        # regenerate the reference pages after changing toolkits or aliases
 uv run python tools/ci.py --full --linux   # local CI: every gate, on Windows and Linux (WSL)
 ```

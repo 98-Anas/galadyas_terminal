@@ -34,6 +34,7 @@ theme = "space"                 # space, light, contrast
 alias_style = "linux"           # linux or native (PowerShell aliases)
 confirm_multiline_paste = true  # ask before a paste that would run several commands
 show_home = true                # start with the home window
+remember_history = true         # keep commands for autocomplete (secrets never stored)
 ```
 
 The file is read as **data only** (TOML); it can never run code. Unknown keys, wrong types and invalid values

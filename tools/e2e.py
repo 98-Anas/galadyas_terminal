@@ -1,6 +1,6 @@
-"""Spike go/no-go checks: run real shells inside the terminal widget, headless, and measure.
+"""End-to-end checks: real shells inside the terminal, headless, with measurements.
 
-Usage: uv run python apps/terminal/spike/check.py [OUT_DIR]
+Usage: uv run python tools/e2e.py [OUT_DIR]
 """
 
 import asyncio
@@ -34,7 +34,7 @@ async def wait_for(pane: TerminalPane, needle: str, timeout: float = 30.0) -> fl
 
 async def run(shell_name: str, steps) -> None:
     shell = next(s for s in shells.detect() if shell_name.lower() in s.name.lower())
-    app = TerminalApp(shell, settings=Settings(show_home=False))
+    app = TerminalApp(shell, settings=Settings(show_home=False, remember_history=False))
     async with app.run_test(size=(110, 32)) as pilot:
         pane = app.query_one(TerminalPane)
         await asyncio.sleep(2.5)                     # shell start-up
@@ -90,7 +90,7 @@ async def bash() -> None:
         pane.write("vim -u NONE -N\r")
         await wait_for(pane, "~", timeout=15)
         await asyncio.sleep(1.0)
-        app.save_screenshot(filename="spike-vim.svg", path=str(OUT))
+        app.save_screenshot(filename="e2e-vim.svg", path=str(OUT))
         check("Full-screen program (vim) renders", screen_text(pane).count("~") > 5)
         pane.write("\x1b")                          # Escape alone, then the command (else it reads as Alt+:)
         await asyncio.sleep(0.3)
@@ -120,7 +120,7 @@ async def bash() -> None:
         text = screen_text(pane)
         got = text[text.find("SIZE-2 "):].split()[1]
         check("Resize reaches the shell", got.startswith("78x"), got + " (80 columns minus the pane border)")
-        app.save_screenshot(filename="spike-gitbash.svg", path=str(OUT))
+        app.save_screenshot(filename="e2e-bash.svg", path=str(OUT))
 
     await run(BASH, [basics, unicode, throughput, keys, fullscreen, resize])
 

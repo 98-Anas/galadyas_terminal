@@ -68,7 +68,7 @@ from operating-system adapters.
 | Pure logic | Plain pytest: copy mode, keys, paste, toolkit, aliases, config, task sorting |
 | Screen model | Feeding sequences to `TerminalScreen`, including hostile input |
 | App | Textual's `run_test` pilot with a real shell: splits, zoom, tabs, copy mode, paste confirmation, task manager, toolkit insertion |
-| End to end | `spike/check.py`: real shells, throughput, Ctrl+C, vim in and out, resize; on Windows (Git Bash, PowerShell, WSL) and Linux |
+| End to end | `tools/e2e.py`: real shells, throughput, Ctrl+C, vim in and out, resize; on Windows (Git Bash, PowerShell, WSL) and Linux |
 | Docs | `tools/gen_docs.py --check` keeps the reference pages identical to the code |
 | Local CI | `tools/ci.py` runs every gate above plus ruff (with security rules) and pip-audit; `--linux` repeats them on Linux through WSL |
 

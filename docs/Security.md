@@ -17,7 +17,8 @@ systems without consent, evade detection, or harm people.
   yours.)
 - **No telemetry**, no analytics, no update checks.
 - **No disk logging.** Scrollback and the copy buffer live in memory and vanish when the pane closes. The
-  only file the app writes is the settings file, and only when you choose *Save settings* or `--init-config`.
+  app writes two files: the settings file (only when you choose *Save settings* or `--init-config`) and the
+  autocomplete history (see below), which you can turn off.
 - **No automatic changes to your shell.** Aliases are printed for you to review and add yourself.
 - **No commands run on your behalf.** Toolkit commands are inserted at the prompt; you press Enter.
 
@@ -36,6 +37,7 @@ systems without consent, evade detection, or harm people.
 | **Shell injection through toolkit values** | Values are stripped of control characters and quoted as one argument; inside existing quotes, closing characters are removed | `tests/test_toolkit.py` |
 | **Accidental process termination** | Confirmation with the full command line; system processes and the app itself are refused | `tests/test_tasks.py` |
 | **Malicious settings file** | TOML is parsed as data; unknown keys, wrong types and out-of-range values are ignored | `tests/test_config.py` |
+| **Secrets in command history** | Autocomplete history never stores commands with a leading space or anything that looks like a secret: `password=`, `--token`, API keys (AWS, GitHub, Slack, `sk-`), `user:pass@` URLs, `-pSECRET`, `export ..._KEY=`. The file is private to your user (mode 600 on Linux). `remember_history = false` keeps it in memory only; *Forget history* in the palette deletes it | `tests/test_suggest.py` |
 | **Weak generated passwords** | `genpass` uses cryptographic randomness on both shells | `docs/Aliases.md` |
 | **Vulnerable dependencies** | Few dependencies (Textual, pyte, psutil, pywinpty or ptyprocess), versions locked in `uv.lock`, checked with `pip-audit` | local CI (`tools/ci.py`) |
 

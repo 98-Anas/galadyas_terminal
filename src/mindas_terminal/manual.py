@@ -15,7 +15,7 @@ from textual.screen import Screen
 from textual.widgets import Input, Markdown, OptionList, Static
 from textual.widgets.option_list import Option
 
-ORDER = ["Home", "Getting-Started", "Keyboard-Reference", "Field-Guides", "Tabs-and-Panes", "Copy-Mode",
+ORDER = ["Home", "Getting-Started", "Keyboard-Reference", "Field-Guides", "Tabs-and-Panes", "Autocomplete", "Copy-Mode",
          "Task-Manager", "Toolkits", "Aliases", "Configuration", "Security", "Troubleshooting", "FAQ",
          "Architecture", "Installation", "Toolkit-Reference", "Aliases-Reference"]
 

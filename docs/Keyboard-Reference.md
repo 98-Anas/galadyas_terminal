@@ -56,6 +56,7 @@ Enter with `prefix [`, `Shift+PageUp`, or the mouse wheel.
 | `prefix H` | Home window: open shells and tools with a click |
 | `prefix m` | Manual: these pages, offline and searchable |
 | `prefix g` | Toolkits: curated commands for your field |
+| `Right` / `End` / `Alt+Right` | Accept the autocomplete suggestion / one word of it ([Autocomplete](Autocomplete)) |
 | `prefix t` | Task manager |
 | `prefix :` or `prefix P` | Command palette |
 | `prefix ]` | Paste the text copied last in copy mode |

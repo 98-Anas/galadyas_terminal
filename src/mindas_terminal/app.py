@@ -14,7 +14,7 @@ from textual.command import DiscoveryHit, Hit, Hits, Provider
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Static, TabbedContent, TabPane
 
-from . import __version__, aliases, config, paste, shells, theme, toolkit
+from . import __version__, aliases, config, paste, shells, suggest, theme, toolkit
 from .dialogs import Confirm, Help, Prompt
 from .widget import TerminalPane
 
@@ -28,6 +28,10 @@ Tabs                                  Panes
   prefix ,      rename tab              prefix o      next pane
   prefix &      close tab               prefix z      zoom pane (toggle)
                                         prefix x      close pane
+
+Autocomplete: type two or more characters; a faint suggestion appears after the cursor.
+  Right arrow or End accepts it, Alt+Right accepts one word, keep typing to ignore it.
+  After "command not found", the suggested fix appears on the empty line: Right arrow to use it.
 
 Copy mode (vim keys)                  Tools
   prefix [  or Shift+PageUp  or wheel   prefix t      task manager
@@ -75,6 +79,7 @@ class TerminalCommands(Provider):
             ("Keyboard help", app.action_help, "All key bindings"),
             ("Home window", app.action_home, "Start screen: shells and tools"),
             ("Manual", app.action_manual, "The full manual, offline and searchable"),
+            ("Forget history", app.action_forget_history, "Delete remembered commands used for autocomplete"),
             ("Quit", app.action_quit_app, "Close every tab and exit"),
         ]
         for sh in app.shells:
@@ -139,6 +144,10 @@ class MindasTerminal(App[None]):
         self._last_pane: dict[str, TerminalPane] = {}  # tab id -> last focused pane
         self._zoomed: TerminalPane | None = None
         self._sys = ""
+        self.history = self._load_history()
+        self._ranked: list[str] | None = None
+        self._unsaved = 0
+        self._extra = tuple(t.command for t in toolkit.for_platform(sys.platform) if "<" not in t.command)
 
     # layout
     def compose(self) -> ComposeResult:
@@ -156,6 +165,52 @@ class MindasTerminal(App[None]):
             await self.action_new_tab()
         self._update_system()
         self.set_interval(2.0, self._update_system)
+
+    # autocomplete data
+    def _load_history(self) -> suggest.History:
+        if not self.settings.remember_history:
+            return suggest.History()
+        try:
+            return suggest.History.loads(config.history_path().read_text(encoding="utf-8"))
+        except OSError:
+            return suggest.History()
+
+    def save_history(self) -> None:
+        if self.settings.remember_history and self._unsaved:
+            try:
+                config.save_private(config.history_path(), self.history.dumps())
+                self._unsaved = 0
+            except OSError:
+                pass                                   # history is a convenience, never an error
+
+    def remember(self, command: str) -> None:
+        if self.history.add(command):
+            self._ranked = None
+            self._unsaved += 1
+            if self._unsaved >= 10:
+                self.save_history()
+
+    def completions(self) -> tuple[list[str], tuple[str, ...]]:
+        if self._ranked is None:
+            self._ranked = self.history.ranked()
+        return self._ranked, self._extra
+
+    def action_forget_history(self) -> None:
+        def done(ok: bool) -> None:
+            if ok:
+                self.history = suggest.History()
+                self._ranked, self._unsaved = None, 0
+                try:
+                    config.history_path().unlink(missing_ok=True)
+                except OSError:
+                    pass
+                self.notify("History forgotten", timeout=3)
+
+        self.push_screen(Confirm("Forget all remembered commands?", "Autocomplete starts fresh.", "Forget"), done)
+
+    def exit(self, *args, **kwargs) -> None:
+        self.save_history()
+        super().exit(*args, **kwargs)
 
     def action_home(self) -> None:
         from .home import HomeScreen
@@ -535,7 +590,7 @@ class MindasTerminal(App[None]):
         self._refresh_status()
 
 
-# Kept so older imports keep working (spike scripts, tests).
+# Short alias used by tools/e2e.py.
 TerminalApp = MindasTerminal
 
 

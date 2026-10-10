@@ -67,7 +67,7 @@ def main() -> int:
         audit(results)
     if full:
         out = tempfile.mkdtemp(prefix="mindas-terminal-e2e-")
-        run("end-to-end with real shells", ["uv", "run", "python", "spike/check.py", out], results, env)
+        run("end-to-end with real shells", ["uv", "run", "python", "tools/e2e.py", out], results, env)
     if with_linux:
         linux(results, full)
 
