@@ -34,6 +34,8 @@ Copy mode (vim keys)                  Tools
   h j k l  w b  0 ^ $  H M L            prefix :  or prefix P   command palette
   Ctrl+U / Ctrl+D  half page            prefix ]      paste the last copied text
   Ctrl+B / Ctrl+F  page, g / G  ends    prefix g      toolkits: commands for your field
+                                        prefix H      home window
+                                        prefix m      manual (offline, searchable)
                                         prefix ?      this help
   / ?  search,  n / N  next / previous  Ctrl+Q        quit
   v  select, V  select lines, y  copy
@@ -46,6 +48,11 @@ Safety: multi-line pastes that would run immediately ask first; pasted control c
 format characters are removed; program titles are sanitised; scrollback stays in memory only; no network
 access and no telemetry.
 """
+
+# Clickable words in the status bar; each runs an app action.
+STATUS_ACTIONS = ("[@click=app.home]home[/]  [@click=app.new_tab]+tab[/]  [@click=app.split('right')]split[/]  "
+                  "[@click=app.zoom]zoom[/]  [@click=app.toolkit]tools[/]  [@click=app.task_manager]tasks[/]  "
+                  "[@click=app.manual]manual[/]  [@click=app.help]keys[/]   ")
 
 KEY_NAMES = {"ctrl+b": "Ctrl+B", "ctrl+a": "Ctrl+A", "ctrl+space": "Ctrl+Space", "ctrl+backslash": "Ctrl+\\"}
 
@@ -66,6 +73,8 @@ class TerminalCommands(Provider):
             ("Task manager", app.action_task_manager, "Processes, CPU, memory and GPU"),
             ("Toolkits", app.action_toolkit, "Curated commands for DevOps, HPC, AI, data, security, IT, PM"),
             ("Keyboard help", app.action_help, "All key bindings"),
+            ("Home window", app.action_home, "Start screen: shells and tools"),
+            ("Manual", app.action_manual, "The full manual, offline and searchable"),
             ("Quit", app.action_quit_app, "Close every tab and exit"),
         ]
         for sh in app.shells:
@@ -106,6 +115,7 @@ class MindasTerminal(App[None]):
     .column { width: 1fr; height: 1fr; }
     #status { height: 1; background: $panel; }
     #status-left { width: 1fr; }
+    #status-actions { width: auto; color: $text-muted; }
     #status-right { width: auto; color: $text-muted; }
     """
     BINDINGS = [Binding("ctrl+q", "quit_app", "Quit", priority=True, show=False)]
@@ -135,13 +145,30 @@ class MindasTerminal(App[None]):
         yield TabbedContent(id="tabs")
         with Horizontal(id="status"):
             yield Static(id="status-left")
+            yield Static(STATUS_ACTIONS, id="status-actions")
             yield Static(id="status-right")
 
     async def on_mount(self) -> None:
         theme.apply(self, self.settings.theme)
-        await self.action_new_tab()
+        if self.settings.show_home:
+            self.action_home()
+        else:
+            await self.action_new_tab()
         self._update_system()
         self.set_interval(2.0, self._update_system)
+
+    def action_home(self) -> None:
+        from .home import HomeScreen
+
+        def chosen(shell: shells.Shell | None) -> None:
+            self.run_worker(self.action_new_tab(shell or self.shell))
+
+        self.push_screen(HomeScreen(self.shells, self.profile), chosen)
+
+    def action_manual(self, page: str = "Home") -> None:
+        from .manual import ManualScreen
+
+        self.push_screen(ManualScreen(page))
 
     def _new_pane(self, shell: shells.Shell | None = None) -> TerminalPane:
         self._pane_seq += 1
@@ -372,9 +399,16 @@ class MindasTerminal(App[None]):
         pane = self.current_pane()
 
         def insert(command: str | None) -> None:
-            if command and pane is not None and pane.is_attached:
-                pane.write(paste.sanitize(command).replace("\n", " "))   # inserted, never run
+            if not command:
+                return
+            line = paste.sanitize(command).replace("\n", " ")
+            if pane is not None and pane.is_attached:
+                pane.write(line)                                           # inserted, never run
                 pane.focus()
+            else:                                                          # opened from the home window
+                self.copy_to_clipboard(line)
+                self.paste_buffer = line
+                self.notify("Copied. Open a shell and paste it (prefix ]).", timeout=4)
 
         self.push_screen(ToolkitScreen(self.profile), insert)
 
@@ -422,7 +456,7 @@ class MindasTerminal(App[None]):
         "o": ("action_next_pane",), "z": ("action_zoom",), "x": ("action_close_pane",),
         "[": ("action_copy_mode",), "]": ("action_paste_buffer",),
         "t": ("action_task_manager",), "g": ("action_toolkit",), ":": ("action_command_palette",), "P": ("action_command_palette",),
-        "?": ("action_help",),
+        "?": ("action_help",), "H": ("action_home",), "m": ("action_manual",),
         **{str(i): ("action_select_tab", i - 1) for i in range(1, 10)},
     }
 
@@ -484,8 +518,6 @@ class MindasTerminal(App[None]):
             panes = len(self._tab_panes(self.tabbed.active))
             if panes > 1:
                 t.append(f"  {panes} panes", style="#8b93b8")
-        hint = KEY_NAMES.get(self.prefix, self.prefix)
-        t.append(f"   {hint} ? help", style="#8b93b8")
         left.update(t)
 
     def _update_system(self) -> None:
@@ -525,10 +557,19 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--alias-style", choices=config.ALIAS_STYLES,
                    help="powershell aliases: linux adds Linux command names (touch, which, grep...); native does not")
     p.add_argument("--init-config", action="store_true", help="write a settings file with the defaults and exit")
+    p.add_argument("--no-home", action="store_true", help="start in a shell instead of the home window")
+    p.add_argument("--man", action="store_true", help="print the manual page (roff) and exit")
     p.add_argument("--version", action="version", version=f"mindas-terminal {__version__}")
     args = p.parse_args(argv)
     for w in warnings:
         print(f"mindas-terminal: {w}", file=sys.stderr)
+    if args.man:
+        from . import manpage
+
+        sys.stdout.write(manpage.render())
+        return 0
+    if args.no_home:
+        settings = config.replace(settings, show_home=False)
     if args.init_config:
         target = config.path()
         if target.exists():

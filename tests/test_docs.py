@@ -18,3 +18,13 @@ def test_wiki_links_point_to_existing_pages():
     for page in docs.glob("*.md"):
         for target in re.findall(r"\]\(([A-Za-z-]+)(?:#[^)]*)?\)", page.read_text(encoding="utf-8")):
             assert target in pages, f"{page.name} links to missing page {target}"
+
+
+def test_man_page_is_valid_roff_shape():
+    from mindas_terminal import manpage
+
+    page = manpage.render()
+    assert page.startswith(".TH MINDAS")
+    for section in ("NAME", "SYNOPSIS", "DESCRIPTION", "OPTIONS", "KEYS", "FILES", "SECURITY", "SEE ALSO"):
+        assert f".SH {section}" in page
+    assert all(not line.startswith("'") for line in page.splitlines())

@@ -12,6 +12,7 @@ import psutil
 
 from mindas_terminal import shells
 from mindas_terminal.app import TerminalApp
+from mindas_terminal.config import Settings
 from mindas_terminal.widget import TerminalPane
 
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
@@ -33,7 +34,7 @@ async def wait_for(pane: TerminalPane, needle: str, timeout: float = 30.0) -> fl
 
 async def run(shell_name: str, steps) -> None:
     shell = next(s for s in shells.detect() if shell_name.lower() in s.name.lower())
-    app = TerminalApp(shell)
+    app = TerminalApp(shell, settings=Settings(show_home=False))
     async with app.run_test(size=(110, 32)) as pilot:
         pane = app.query_one(TerminalPane)
         await asyncio.sleep(2.5)                     # shell start-up

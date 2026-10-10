@@ -8,7 +8,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from mindas_terminal import aliases, toolkit
+from mindas_terminal import aliases, manpage, toolkit
 
 DOCS = Path(__file__).resolve().parent.parent / "docs"
 
@@ -59,7 +59,8 @@ def aliases_page() -> str:
     return "\n".join(out)
 
 
-PAGES = {"Toolkit-Reference.md": toolkits_page, "Aliases-Reference.md": aliases_page}
+PAGES = {"Toolkit-Reference.md": toolkits_page, "Aliases-Reference.md": aliases_page,
+         "man/mindas-terminal.1": manpage.render}
 
 
 def main(check: bool = False) -> int:
@@ -71,6 +72,7 @@ def main(check: bool = False) -> int:
             if not path.exists() or path.read_text(encoding="utf-8") != text:
                 stale.append(name)
         else:
+            path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(text, encoding="utf-8", newline="\n")
             print(f"wrote {path}")
     if stale:

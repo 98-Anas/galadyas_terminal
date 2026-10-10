@@ -67,6 +67,17 @@ mindas-terminal --version
 mindas-terminal --list-shells      # the shells it found, best first
 ```
 
+## Man page
+
+```bash
+mindas-terminal --man | man -l -                                  # read it now
+mkdir -p ~/.local/share/man/man1
+mindas-terminal --man > ~/.local/share/man/man1/mindas-terminal.1 # then: man mindas-terminal
+```
+
+The same page is in the repository at `docs/man/mindas-terminal.1`. On Windows, read the manual inside the
+app instead (`Ctrl+B` then `m`), or with `mindas-terminal --help`.
+
 ## Upgrade and uninstall
 
 ```bash

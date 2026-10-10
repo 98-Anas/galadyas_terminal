@@ -24,6 +24,9 @@ First usable version.
   PowerShell (`alias_style`).
 - Settings file (TOML), command-line options, command palette switches for shell, profile, theme and prefix.
 - Themes: space, light and high contrast.
+- Home window with clickable cards for every shell (each WSL distribution by name) and tool.
+- Clickable status-bar actions; mouse support for tabs, panes, dialogs and the manual.
+- Manual inside the app (offline, searchable, linked pages) and a man page (`--man`, `docs/man`).
 - Documentation and wiki pages, with reference pages generated from the code.
 
 ### Security

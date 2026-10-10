@@ -4,7 +4,10 @@ import pytest
 
 from mindas_terminal import shells
 from mindas_terminal.app import MindasTerminal
+from mindas_terminal.config import Settings
 from mindas_terminal.widget import TerminalPane
+
+NO_HOME = Settings(show_home=False)
 
 SHELL = shells.detect()[0]
 pytestmark = pytest.mark.skipif(not SHELL, reason="no shell")
@@ -19,7 +22,7 @@ async def wait(pane, needle, timeout=20):
 
 
 async def test_tabs_splits_prefix_and_copy_mode():
-    app = MindasTerminal(SHELL)
+    app = MindasTerminal(SHELL, settings=NO_HOME)
     async with app.run_test(size=(120, 36)) as pilot:
         await asyncio.sleep(1.5)
         assert len(app.all_panes()) == 1
@@ -50,7 +53,7 @@ async def test_tabs_splits_prefix_and_copy_mode():
 
 
 async def test_multiline_paste_asks_first():
-    app = MindasTerminal(SHELL)
+    app = MindasTerminal(SHELL, settings=NO_HOME)
     async with app.run_test(size=(100, 30)) as pilot:
         await asyncio.sleep(1.0)
         pane = app.current_pane()
@@ -70,7 +73,7 @@ async def test_multiline_paste_asks_first():
 
 
 async def test_task_manager_opens_and_lists():
-    app = MindasTerminal(SHELL)
+    app = MindasTerminal(SHELL, settings=NO_HOME)
     async with app.run_test(size=(140, 40)) as pilot:
         await asyncio.sleep(1.0)
         await pilot.press("ctrl+b", "t")
@@ -87,7 +90,7 @@ async def test_task_manager_opens_and_lists():
 
 
 async def test_toolkit_inserts_without_running():
-    app = MindasTerminal(SHELL, profile="network")
+    app = MindasTerminal(SHELL, profile="network", settings=NO_HOME)
     async with app.run_test(size=(140, 40)) as pilot:
         await asyncio.sleep(1.0)
         pane = app.current_pane()
@@ -100,3 +103,49 @@ async def test_toolkit_inserts_without_running():
         await pilot.press(*"example.com", "enter")
         await pilot.pause()
         assert sent == ["curl -sSI example.com"]              # inserted; no Enter, so it does not run
+
+
+async def test_home_window_opens_a_shell_by_click():
+    app = MindasTerminal(SHELL)
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.pause()
+        assert type(app.screen).__name__ == "HomeScreen"
+        assert not app.all_panes()
+        await pilot.click("#shell-0")
+        await asyncio.sleep(0.8)
+        assert len(app.all_panes()) == 1 and type(app.screen).__name__ != "HomeScreen"
+
+
+async def test_home_tools_and_manual_navigation():
+    app = MindasTerminal(SHELL)
+    async with app.run_test(size=(120, 40)) as pilot:
+        await pilot.pause()
+        await pilot.click("#tool-manual")
+        await pilot.pause()
+        screen = app.screen
+        assert type(screen).__name__ == "ManualScreen" and screen.page == "Home"
+        screen.show("Copy-Mode")
+        assert screen.page == "Copy-Mode" and screen.history == ["Home"]
+        await pilot.press("b")
+        assert screen.page == "Home"
+        from mindas_terminal import manual
+        assert "Security" in manual.search("bidi overrides")
+        await pilot.press("escape")
+        assert type(app.screen).__name__ == "HomeScreen"
+
+
+async def test_status_bar_words_are_clickable():
+    app = MindasTerminal(SHELL, settings=NO_HOME)
+    async with app.run_test(size=(140, 36)) as pilot:
+        await asyncio.sleep(1.0)
+        await app.run_action("split('right')")                 # same action the "split" word runs
+        await asyncio.sleep(0.3)
+        assert len(app.all_panes()) == 2
+        right = app.focused
+        await pilot.press("ctrl+b", "h")                       # vim-style: h moves left, never opens home
+        await pilot.pause()
+        assert app.focused is not right and type(app.screen).__name__ != "HomeScreen"
+        from mindas_terminal.app import STATUS_ACTIONS
+        import re
+        for action in re.findall(r"@click=app\.(\w+)", STATUS_ACTIONS):
+            assert hasattr(app, f"action_{action}"), action

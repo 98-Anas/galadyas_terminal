@@ -53,6 +53,8 @@ Enter with `prefix [`, `Shift+PageUp`, or the mouse wheel.
 
 | Keys | Action |
 |---|---|
+| `prefix H` | Home window: open shells and tools with a click |
+| `prefix m` | Manual: these pages, offline and searchable |
 | `prefix g` | Toolkits: curated commands for your field |
 | `prefix t` | Task manager |
 | `prefix :` or `prefix P` | Command palette |
@@ -79,6 +81,17 @@ Enter with `prefix [`, `Shift+PageUp`, or the mouse wheel.
 | `Up` / `Down` | Move |
 | `Enter` | Insert the command at the prompt (it does not run) |
 | `Esc` | Close |
+
+## Mouse
+
+| Click | Action |
+|---|---|
+| A card in the home window | Open that shell or tool |
+| A tab | Go to the tab |
+| A pane | Focus it |
+| `home`, `+tab`, `split`, `zoom`, `tools`, `tasks`, `manual`, `keys` in the status bar | Run that action |
+| A page or a link in the manual | Open it (web links are copied, not opened) |
+| Mouse wheel in a pane | Copy mode (or arrow keys in full-screen programs) |
 
 ## Passing keys through
 

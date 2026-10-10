@@ -9,11 +9,14 @@ mindas-terminal                     # best shell found: bash first, also on Wind
 mindas-terminal --shell powershell  # or pick one: see mindas-terminal --list-shells
 ```
 
-You see one tab with one pane running your shell, and a status bar at the bottom:
+You see the **home window**: every shell found on the machine (including each WSL distribution) and the
+tools, as cards. Click one, press its number, or press Enter for the first shell. `--no-home` (or
+`show_home = false` in the settings) skips it; `Ctrl+B` then `H` (capital) brings it back.
 
-```
- mindas  Git Bash   Ctrl+B ? help                                CPU 12.0%  RAM 41.3%  14:05
-```
+![Home window](images/home.png)
+
+In a shell you have one tab, one pane, and a status bar at the bottom. The words in the middle of the status
+bar are **clickable**: `home`, `+tab`, `split`, `zoom`, `tools`, `tasks`, `manual`, `keys`.
 
 Type commands as usual. Everything you know from your shell still works.
 
@@ -77,6 +80,12 @@ eval "$(mindas-terminal --aliases bash)"       # try them now in bash
 
 You get shortcuts such as `mkcd`, `up 3`, `extract`, `ports`, `gs`, `dps`, `sq`, `gpu`, and on PowerShell also
 Linux names such as `touch`, `which`, `grep`, `head`, `df`. Details: [Aliases](Aliases).
+
+## 8. The manual, always with you
+
+`Ctrl+B` then `m` opens this manual inside the app, offline. Click a page or a link, type to search, `b` goes
+back. On Linux, `mindas-terminal --man | man -l -` shows the classic man page; see [Installation](Installation)
+to install it for `man mindas-terminal`.
 
 ## Next
 

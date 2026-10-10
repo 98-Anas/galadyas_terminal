@@ -33,6 +33,7 @@ profile = "hpc"                 # toolkit field listed first; empty = none
 theme = "space"                 # space, light, contrast
 alias_style = "linux"           # linux or native (PowerShell aliases)
 confirm_multiline_paste = true  # ask before a paste that would run several commands
+show_home = true                # start with the home window
 ```
 
 The file is read as **data only** (TOML); it can never run code. Unknown keys, wrong types and invalid values
@@ -52,6 +53,8 @@ are ignored with a warning on start-up, and the default is used. A broken file n
 | `--theme NAME` | `space`, `light` or `contrast` |
 | `--aliases bash\|powershell\|list` | Print the opt-in aliases and exit |
 | `--alias-style linux\|native` | PowerShell alias flavour for `--aliases powershell` |
+| `--no-home` | Start in a shell instead of the home window |
+| `--man` | Print the man page (roff) and exit |
 | `--init-config` | Write the settings file with defaults (never overwrites) and exit |
 | `--version` | Show the version |
 

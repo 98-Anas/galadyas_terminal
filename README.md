@@ -11,7 +11,7 @@ Real shells with bash first everywhere, tabs and split panes with tmux-style key
 manager with GPU use, and offline toolkits of curated commands for DevOps, HPC, AI, data, security,
 IT support and project management.
 
-![Split panes in mindas terminal](docs/images/splits.png)
+![Home window](docs/images/home.png)
 
 ## Why
 
@@ -34,9 +34,16 @@ IT support and project management.
 | **Task manager** | CPU, memory and NVIDIA GPU per process, sort, filter, "only this terminal", terminate or kill with confirmation |
 | **Toolkits** | Commands for 11 fields, placeholders filled with safe quoting, profiles that put your field first |
 | **Aliases** | 89 opt-in aliases and helpers for bash and PowerShell, including Linux command names for PowerShell |
+| **Home window** | Clickable start screen: every shell and WSL distribution, tools, system info, tips |
+| **Clickable** | Cards, tabs, panes, status-bar actions, manual pages and links all respond to the mouse |
+| **Manual** | Full offline manual inside the app (`Ctrl+B` `m`), searchable, plus a classic man page (`--man`) |
 | **Command palette** | Every action, new tabs per shell, themes, prefix keys, profiles, save settings |
 | **Themes** | Space (default), light, high contrast |
 | **Full-screen programs** | vim, less, htop, top and others, with the shell screen restored when they exit |
+
+| Split panes | Manual inside the app |
+|---|---|
+| ![Split panes](docs/images/splits.png) | ![Manual](docs/images/manual.png) |
 
 | Copy mode with search | Toolkits |
 |---|---|
@@ -70,6 +77,7 @@ Windows Terminal for the best result. Full instructions, including offline insta
 | Scroll back, search, copy | mouse wheel or `Ctrl+B` `[`, then `/text`, `v`, `y` |
 | Find a command for your field | `Ctrl+B` `g` |
 | Task manager | `Ctrl+B` `t` |
+| Home window / manual | `Ctrl+B` `h` / `Ctrl+B` `m` |
 | Command palette | `Ctrl+B` `:` |
 | All keys | `Ctrl+B` `?` |
 | Quit | `Ctrl+Q` |

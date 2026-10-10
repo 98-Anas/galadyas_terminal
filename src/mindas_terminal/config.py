@@ -22,6 +22,7 @@ class Settings:
     theme: str = "space"
     alias_style: str = "linux"         # linux: Linux command names in PowerShell too; native: PowerShell only
     confirm_multiline_paste: bool = True
+    show_home: bool = True             # start with the home window
 
 
 THEMES = ("space", "light", "contrast")

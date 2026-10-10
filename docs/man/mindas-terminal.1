@@ -1,0 +1,191 @@
+.TH MINDAS\-TERMINAL 1 "2026-10-11" "mindas-terminal 0.1.0" "User Commands"
+.SH NAME
+mindas\-terminal \- universal terminal for Windows and Linux with tabs, splits, copy mode, task manager and toolkits
+.SH SYNOPSIS
+.B mindas\-terminal
+[\fIOPTIONS\fR]
+.SH DESCRIPTION
+Runs real shells (bash first, also on Windows through Git Bash or WSL) in a text interface with tabs and split panes controlled by a tmux\-style prefix key, vim\-style copy mode over the scrollback, a task manager with GPU use, and offline toolkits of curated commands for eleven fields. Toolkit commands are typed at the prompt and never run automatically.
+.PP
+The prefix key is \fBCtrl+B\fR by default: press it, release it, then the command key. Press it twice to send it to the program.
+.SH OPTIONS
+.TP
+\fB\-\-shell NAME\fR
+shell to start; part of the name is enough (see \-\-list\-shells)
+.TP
+\fB\-\-list\-shells\fR
+list detected shells, best first, and exit
+.TP
+\fB\-\-prefix KEY\fR
+prefix key: ctrl+b, ctrl+a, ctrl+space, ctrl+backslash
+.TP
+\fB\-\-scrollback N\fR
+lines of scrollback per pane, 0 to 1000000 (default 10000)
+.TP
+\fB\-\-cwd DIR\fR
+start directory for new shells
+.TP
+\fB\-\-profile FIELD\fR
+toolkit field listed first: linux, windows, network, git, devops, hpc, ai, data\-eng, data\-sci, security, pm
+.TP
+\fB\-\-theme NAME\fR
+colours: space, light, contrast
+.TP
+\fB\-\-no\-home\fR
+start in a shell instead of the home window
+.TP
+\fB\-\-aliases bash|powershell|list\fR
+print the opt\-in aliases and exit
+.TP
+\fB\-\-alias\-style linux|native\fR
+include Linux command names in the PowerShell aliases, or not
+.TP
+\fB\-\-init\-config\fR
+write a settings file with the defaults and exit (never overwrites)
+.TP
+\fB\-\-man\fR
+print this manual page in roff format and exit
+.TP
+\fB\-\-version\fR
+print the version and exit
+.SH KEYS
+.SS Tabs
+.TP
+\fBprefix c\fR
+new tab
+.TP
+\fBprefix n, prefix p\fR
+next, previous tab
+.TP
+\fBprefix 1..9\fR
+go to tab
+.TP
+\fBprefix ,\fR
+rename tab
+.TP
+\fBprefix &\fR
+close tab (asks first)
+.SS Panes
+.TP
+\fBprefix % or prefix |\fR
+split right
+.TP
+\fBprefix " or prefix \-\fR
+split down
+.TP
+\fBprefix arrow, prefix h j k l\fR
+move between panes
+.TP
+\fBprefix o\fR
+next pane
+.TP
+\fBprefix z\fR
+zoom the pane, toggle
+.TP
+\fBprefix x\fR
+close the pane (asks first)
+.SS Copy mode
+.TP
+\fBprefix [, Shift+PageUp, mouse wheel\fR
+enter copy mode
+.TP
+\fBh j k l, w b, 0 ^ $, H M L\fR
+move
+.TP
+\fBCtrl+U, Ctrl+D, Ctrl+B, Ctrl+F\fR
+half page, page
+.TP
+\fBg, G\fR
+oldest, newest line
+.TP
+\fB/ ?, n N\fR
+search forward, backward; next, previous
+.TP
+\fBv, V, y\fR
+select characters, select lines, copy
+.TP
+\fBq, Esc\fR
+leave
+.SS Tools
+.TP
+\fBprefix H\fR
+home window
+.TP
+\fBprefix g\fR
+toolkits
+.TP
+\fBprefix t\fR
+task manager
+.TP
+\fBprefix m\fR
+manual
+.TP
+\fBprefix : or prefix P\fR
+command palette
+.TP
+\fBprefix ]\fR
+paste the last copy
+.TP
+\fBprefix ?\fR
+keyboard reference
+.TP
+\fBCtrl+Q\fR
+quit
+.SH TOOLKITS
+109 commands in these fields (profile name, then field):
+.TP
+\fBlinux\fR
+Linux and IT support
+.TP
+\fBwindows\fR
+Windows administration
+.TP
+\fBnetwork\fR
+Networking
+.TP
+\fBgit\fR
+Git and code review
+.TP
+\fBdevops\fR
+DevOps and cloud
+.TP
+\fBhpc\fR
+HPC and Slurm
+.TP
+\fBai\fR
+AI and ML engineering
+.TP
+\fBdata\-eng\fR
+Data engineering
+.TP
+\fBdata\-sci\fR
+Data science
+.TP
+\fBsecurity\fR
+Cybersecurity (ethical)
+.TP
+\fBpm\fR
+IT project management
+.PP
+Use these only on systems you own or are authorised in writing to test. Unauthorised scanning or access is illegal in most countries.
+.SH ALIASES
+89 opt\-in aliases and helper functions. Nothing is installed automatically. Try them with:
+.PP
+.nf
+eval "$(mindas\-terminal \-\-aliases bash)"
+mindas\-terminal \-\-aliases powershell | Out\-String | Invoke\-Expression
+.fi
+.SH FILES
+.TP
+\fI%APPDATA%\\mindas\-terminal\\config.toml\fR (Windows), \fI~/.config/mindas\-terminal/config.toml\fR (Linux)
+Settings, TOML, read as data only. Keys: shell, prefix, scrollback, profile, theme, alias_style, confirm_multiline_paste, show_home.
+.SH ENVIRONMENT
+Shells start with \fBTERM=xterm\-256color\fR, \fBCOLORTERM=truecolor\fR and \fBTERM_PROGRAM=mindas\-terminal\fR added to the environment. \fBXDG_CONFIG_HOME\fR and \fBAPPDATA\fR locate the settings file.
+.SH SECURITY
+No network access, no telemetry, scrollback in memory only. Pasted text is cleaned of control and invisible characters; a paste that would run several commands asks first. Only fixed\-format replies are sent to programs. Programs are never looked up in the current folder. Use the security toolkit only on systems you own or are authorised in writing to test.
+.SH EXIT STATUS
+0 on success, 1 when no shell is found, 2 for an unknown shell name.
+.SH SEE ALSO
+\fBtmux\fR(1), \fBvim\fR(1), \fBbash\fR(1). The full manual is inside the app (prefix m) and at https://github.com/98\-Anas/mindas_terminal/wiki
+.SH AUTHOR
+Anas Ayman Elgallad.
