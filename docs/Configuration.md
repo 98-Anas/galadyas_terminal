@@ -70,7 +70,7 @@ dialogs and the status bar.
 
 | Platform | Order |
 |---|---|
-| Windows | Git Bash, MSYS2 bash, WSL bash, PowerShell 7, Windows PowerShell, cmd |
+| Windows | Git Bash, MSYS2 bash, WSL bash (default distribution), each WSL distribution by name, PowerShell 7, Windows PowerShell, cmd |
 | Linux | `$SHELL`, bash, zsh, fish, sh |
 
 Programs are looked up only in absolute `PATH` folders, never in the current folder (see [Security](Security)).

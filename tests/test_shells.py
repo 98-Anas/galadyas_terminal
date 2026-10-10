@@ -21,3 +21,9 @@ def test_safe_which_ignores_current_folder(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("PATH", f".{__import__('os').pathsep}{tmp_path}")
     assert shells.safe_which("fake-tool") is None          # "." and the current folder are both refused
+
+
+def test_parse_wsl_list_utf16_and_hidden():
+    raw = "Ubuntu-22.04\r\ndocker-desktop\r\nDebian\r\n".encode("utf-16-le")
+    assert shells.parse_wsl_list(raw) == ["Ubuntu-22.04", "Debian"]
+    assert shells.parse_wsl_list(b"") == []

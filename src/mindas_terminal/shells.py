@@ -42,6 +42,28 @@ WINDOWS_BASH_CANDIDATES = (
 )
 
 
+# Docker Desktop's internal distributions are not for interactive use.
+_WSL_HIDDEN = ("docker-desktop", "docker-desktop-data")
+
+
+def parse_wsl_list(raw: bytes) -> list[str]:
+    """Names from `wsl.exe -l -q`, which prints UTF-16 on Windows."""
+    text = raw.decode("utf-16-le", errors="ignore") if b"\x00" in raw else raw.decode("utf-8", errors="ignore")
+    names = [line.strip().strip("\x00") for line in text.splitlines()]
+    return [n for n in names if n and n.isprintable() and n not in _WSL_HIDDEN]
+
+
+def wsl_distros(wsl: str) -> list[str]:
+    import subprocess
+
+    try:
+        r = subprocess.run([wsl, "-l", "-q"], capture_output=True, timeout=5,
+                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    except (OSError, subprocess.SubprocessError):
+        return []
+    return parse_wsl_list(r.stdout) if r.returncode == 0 else []
+
+
 def detect(platform: str = sys.platform, exists=os.path.exists, which=safe_which) -> list[Shell]:
     """Available shells, best first: bash is preferred so navigation works the same on Windows and Linux."""
     found: list[Shell] = []
@@ -50,8 +72,10 @@ def detect(platform: str = sys.platform, exists=os.path.exists, which=safe_which
             if exists(path):
                 found.append(Shell(name, (path, "--login", "-i")))
                 break
-        if which("wsl.exe"):
-            found.append(Shell("WSL bash", ("wsl.exe", "--cd", "~")))
+        if wsl := which("wsl.exe"):
+            found.append(Shell("WSL bash", (wsl, "--cd", "~")))            # the default distribution
+            for distro in wsl_distros(wsl):
+                found.append(Shell(f"WSL: {distro}", (wsl, "-d", distro, "--cd", "~")))
         for name, exe in (("PowerShell 7", "pwsh.exe"), ("Windows PowerShell", "powershell.exe"), ("cmd", "cmd.exe")):
             if path := which(exe):
                 found.append(Shell(name, (path, "-NoLogo") if "powershell" in exe.lower() or "pwsh" in exe else (path,)))
