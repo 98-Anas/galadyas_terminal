@@ -9,22 +9,12 @@ import random
 from rich.text import Text
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.containers import Center, Grid, Vertical
+from textual.containers import Grid, Vertical
 from textual.screen import Screen
 from textual.widgets import Button, Static
 
 from . import __version__
 from .shells import Shell
-
-LOGO = r"""
-           _           _
- _ __ ___ (_)_ __   __| | __ _ ___
-| '_ ` _ \| | '_ \ / _` |/ _` / __|
-| | | | | | | | | | (_| | (_| \__ \
-|_| |_| |_|_|_| |_|\__,_|\__,_|___/
-""".strip("\n")
-
-GRADIENT = ["#7aa2ff", "#8b9cff", "#9c95ff", "#ad8fff", "#b18cff"]
 
 TIPS = [
     "Ctrl+B then % splits side by side; Ctrl+B then \" splits top and bottom.",
@@ -50,10 +40,12 @@ def system_line() -> str:
         hw = f"{psutil.cpu_count() or 1} CPUs, {mem.total / 1024**3:.1f} GB RAM"
     except Exception:  # noqa: BLE001 - information only
         hw = ""
-    where = platform.system() + " " + platform.release()
+    where = platform.system()
+    if where == "Windows":
+        where += " " + platform.release()
     if "microsoft" in platform.release().lower() or os.environ.get("WSL_DISTRO_NAME"):
         where += f" (WSL: {os.environ.get('WSL_DISTRO_NAME', 'Linux')})"
-    return f"{platform.node()}  |  {where}  |  {hw}"
+    return f"{where}  ·  {hw}"                     # no host name: the screen may be shared or recorded
 
 
 class HomeScreen(Screen[Shell | None]):
@@ -62,13 +54,13 @@ class HomeScreen(Screen[Shell | None]):
     DEFAULT_CSS = """
     HomeScreen { background: $background; align: center middle; }
     #home { width: 96; max-width: 100%; height: auto; }
-    #logo { width: auto; margin-top: 1; }
+    #logo { width: 100%; text-align: center; margin-top: 1; }
     #tag { width: 100%; text-align: center; color: $text-muted; margin-bottom: 1; }
     .section { width: 100%; color: $accent; text-style: bold; margin: 1 0 0 1; }
     .cards { grid-size: 3; grid-gutter: 0 1; height: auto; padding: 0 1; }
     .cards Button { width: 100%; height: 3; border: round $panel; background: $surface; }
     .cards Button:hover { border: round $accent; }
-    .cards Button:focus { border: round $accent; text-style: bold; }
+    #home .cards Button:focus { border: round $accent; text-style: bold; background: $panel; }
     #sys { width: 100%; text-align: center; color: $text-muted; margin-top: 1; }
     #tip { width: 100%; text-align: center; color: $secondary; margin-top: 1; }
     #keys { width: 100%; text-align: center; color: $text-muted; margin-top: 1; }
@@ -93,13 +85,10 @@ class HomeScreen(Screen[Shell | None]):
     def compose(self) -> ComposeResult:
         with Vertical(id="home"):
             logo = Text()
-            for i, line in enumerate(LOGO.splitlines()):
-                logo.append(line + "\n", style=f"bold {GRADIENT[min(i, len(GRADIENT) - 1)]}")
-            logo.append("                   terminal", style="bold #5eead4")
-            with Center():
-                yield Static(logo, id="logo")
-            yield Static(f"v{__version__}   a universal terminal for Windows and Linux   bash first everywhere",
-                         id="tag")
+            logo.append("mindas", style="bold #7aa2ff")
+            logo.append(" terminal", style="bold #e6e9f5")
+            yield Static(logo, id="logo")
+            yield Static(f"Cross-platform terminal workspace  ·  version {__version__}", id="tag")
             yield Static("Open a shell  (click, or press its number; Enter for the first)", classes="section")
             with Grid(classes="cards"):
                 for i, sh in enumerate(self.shells[:8]):

@@ -15,8 +15,15 @@ tools, as cards. Click one, press its number, or press Enter for the first shell
 
 ![Home window](images/home.png)
 
-In a shell you have one tab, one pane, and a status bar at the bottom. The words in the middle of the status
-bar are **clickable**: `home`, `+tab`, `split`, `zoom`, `tools`, `tasks`, `manual`, `keys`.
+In a shell you see a compact tab bar, your shell using the whole window (no border until you split), and
+the **status bar** at the bottom:
+
+- On the left, the **mode**: `NORMAL`, `PREFIX` (after Ctrl+B), `COPY` or `ZOOM`.
+- In the middle, the **keys that work right now**. They change with the mode, so you never have to remember
+  them; click a key to run it.
+- On the right, the shell, the tab number when there are several, and the time.
+
+![Prefix mode shows its keys](images/prefix.png)
 
 Type commands as usual. Everything you know from your shell still works.
 

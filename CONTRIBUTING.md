@@ -21,6 +21,9 @@ Tests start real shells: on Windows, Git Bash is used when installed; on Linux, 
 4. New behaviour has a test. Pure logic goes in a pure module with plain tests (see
    [Architecture](docs/Architecture.md)).
 5. User-visible changes are described in [CHANGELOG.md](CHANGELOG.md) and in the docs.
+6. Screenshots come only from `uv run python tools/screenshots.py`: it uses a demo environment and refuses to
+   write an image that contains your user name, host name or home folder. Never commit screenshots of your
+   own machine.
 
 ## Adding toolkit commands
 

@@ -1,7 +1,7 @@
 # mindas terminal
 
 ![status: work in progress](https://img.shields.io/badge/status-work%20in%20progress-orange)
-![version 0.1.0](https://img.shields.io/badge/version-0.2.0-blue)
+![version 0.1.0](https://img.shields.io/badge/version-0.3.0-blue)
 ![license: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![platforms: Windows | Linux](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux-informational)
 ![python 3.11+](https://img.shields.io/badge/python-3.11%2B-informational)
@@ -37,15 +37,20 @@ IT support and project management.
 | **Toolkits** | Commands for 11 fields, placeholders filled with safe quoting, profiles that put your field first |
 | **Aliases** | 89 opt-in aliases and helpers for bash and PowerShell, including Linux command names for PowerShell |
 | **Home window** | Clickable start screen: every shell and WSL distribution, tools, system info, tips |
-| **Clickable** | Cards, tabs, panes, status-bar actions, manual pages and links all respond to the mouse |
+| **Guided keys** | A status bar that shows the keys for the current mode (normal, prefix, copy, zoom); click any of them |
+| **Clickable** | Cards, tabs, panes, status-bar keys, manual pages and links all respond to the mouse |
 | **Manual** | Full offline manual inside the app (`Ctrl+B` `m`), searchable, plus a classic man page (`--man`) |
 | **Command palette** | Every action, new tabs per shell, themes, prefix keys, profiles, save settings |
 | **Themes** | Space (default), light, high contrast |
 | **Full-screen programs** | vim, less, htop, top and others, with the shell screen restored when they exit |
 
-| Split panes | Manual inside the app |
+| Split panes | Prefix mode shows its keys |
 |---|---|
-| ![Split panes](docs/images/splits.png) | ![Manual](docs/images/manual.png) |
+| ![Split panes](docs/images/splits.png) | ![Prefix mode](docs/images/prefix.png) |
+
+| Manual inside the app | One pane, no borders |
+|---|---|
+| ![Manual](docs/images/manual.png) | ![Single pane](docs/images/single.png) |
 
 | Copy mode with search | Toolkits |
 |---|---|
@@ -148,6 +153,7 @@ uv sync
 uv run pytest                          # unit, screen-model and app tests with real shells
 uv run python tools/e2e.py             # end-to-end checks: throughput, vim, Ctrl+C, resize
 uv run python tools/gen_docs.py        # regenerate the reference pages after changing toolkits or aliases
+uv run python tools/screenshots.py     # documentation screenshots from a demo environment (needs Chrome or Edge)
 uv run python tools/ci.py --full --linux   # local CI: every gate, on Windows and Linux (WSL)
 ```
 

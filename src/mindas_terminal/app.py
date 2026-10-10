@@ -19,44 +19,74 @@ from .dialogs import Confirm, Help, Prompt
 from .widget import TerminalPane
 
 HELP = """\
-Prefix key: {prefix}  (press it, release, then the command key; press it twice to send it to the shell)
+Prefix key: {prefix}. Press it, then a key. Press it twice to send it to the program.
+The status bar always shows the keys for the current mode.
 
-Tabs                                  Panes
-  prefix c      new tab                 prefix %  |   split right
-  prefix n / p  next / previous tab     prefix "  -   split down
-  prefix 1..9   go to tab               prefix arrows or h j k l   move between panes
-  prefix ,      rename tab              prefix o      next pane
-  prefix &      close tab               prefix z      zoom pane (toggle)
-                                        prefix x      close pane
+TABS                                       PANES
+  prefix c        new tab                    prefix %  or |    split right
+  prefix n / p    next / previous tab        prefix "  or -    split down
+  prefix 1 .. 9   go to tab                  prefix arrows     move (or h j k l)
+  prefix ,        rename tab                 prefix o          next pane
+  prefix &        close tab                  prefix z          zoom, toggle
+                                             prefix x          close pane
 
-Autocomplete: type two or more characters; a faint suggestion appears after the cursor.
-  Right arrow or End accepts it, Alt+Right accepts one word, keep typing to ignore it.
-  After "command not found", the suggested fix appears on the empty line: Right arrow to use it.
+COPY MODE  (prefix [, Shift+PageUp or the mouse wheel)
+  h j k l         move                       / ?               search forward / back
+  w b             word forward / back        n N               next / previous match
+  0 ^ $           line start / text / end    v V               select characters / lines
+  Ctrl+U Ctrl+D   half page                  y  or Enter       copy and leave
+  g G             oldest / newest line       q  or Esc         leave
 
-Copy mode (vim keys)                  Tools
-  prefix [  or Shift+PageUp  or wheel   prefix t      task manager
-  h j k l  w b  0 ^ $  H M L            prefix :  or prefix P   command palette
-  Ctrl+U / Ctrl+D  half page            prefix ]      paste the last copied text
-  Ctrl+B / Ctrl+F  page, g / G  ends    prefix g      toolkits: commands for your field
-                                        prefix H      home window
-                                        prefix m      manual (offline, searchable)
-                                        prefix ?      this help
-  / ?  search,  n / N  next / previous  Ctrl+Q        quit
-  v  select, V  select lines, y  copy
-  q  or  Esc  leave copy mode
+AUTOCOMPLETE
+  Type two characters: a faint suggestion appears. Right or End accepts it, Alt+Right one word.
+  After "command not found", the corrected command waits on the prompt: Right accepts it.
 
-Task manager: c m g p n sort (again to reverse), / filter, f only this terminal,
-k terminate, K kill (both ask first), q close.
+TOOLS
+  prefix H        home window                prefix g          toolkits
+  prefix t        task manager               prefix m          manual
+  prefix :        command palette            prefix ]          paste the last copy
+  prefix ?        this help                  Ctrl+Q            quit
 
-Safety: multi-line pastes that would run immediately ask first; pasted control characters and invisible
-format characters are removed; program titles are sanitised; scrollback stays in memory only; no network
-access and no telemetry.
+TASK MANAGER
+  c m g p n       sort by CPU, memory, GPU, PID, name (again to reverse)
+  /  filter    f  only this terminal    k  terminate    K  kill (both ask first)    q  close
+
+SAFETY
+  Pastes are cleaned of hidden characters; a paste that would run several commands asks first.
+  Toolkit commands are typed, never run. No network access, no telemetry.
 """
 
-# Clickable words in the status bar; each runs an app action.
-STATUS_ACTIONS = ("[@click=app.home]home[/]  [@click=app.new_tab]+tab[/]  [@click=app.split('right')]split[/]  "
-                  "[@click=app.zoom]zoom[/]  [@click=app.toolkit]tools[/]  [@click=app.task_manager]tasks[/]  "
-                  "[@click=app.manual]manual[/]  [@click=app.help]keys[/]   ")
+# Status bar: one badge per mode and the keys that work in it. Each hint is (keys, label, action or "").
+MODE_STYLES = {
+    "NORMAL": "bold #070b1a on #7aa2ff", "PREFIX": "bold #070b1a on #fbbf24",
+    "COPY": "bold #070b1a on #5eead4", "ZOOM": "bold #070b1a on #b18cff",
+}
+MODE_HINTS = {
+    "NORMAL": [("{p}", "commands", ""), ("{p} ?", "all keys", "help"), ("{p} g", "toolkits", "toolkit"),
+               ("{p} :", "palette", "command_palette"), ("Ctrl+Q", "quit", "quit_app")],
+    "PREFIX": [("%", "split", "split('right')"), ('"', "split down", "split('down')"), ("c", "tab", "new_tab"),
+               ("n p", "tabs", ""), ("arrows", "move", ""), ("z", "zoom", "zoom"), ("x", "close", "close_pane"),
+               ("[", "copy", "copy_mode"), ("g", "tools", "toolkit"), ("t", "tasks", "task_manager"),
+               ("m", "manual", "manual"), ("Esc", "cancel", "")],
+    "COPY": [("h j k l", "move", ""), ("/ ?", "search", ""), ("n N", "next match", ""), ("v V", "select", ""),
+             ("y", "copy", ""), ("q", "leave", "")],
+    "ZOOM": [("{p} z", "restore layout", "zoom"), ("{p} ?", "all keys", "help"), ("Ctrl+Q", "quit", "quit_app")],
+}
+
+
+def hint_markup(hints: list[tuple[str, str, str]], prefix: str) -> str:
+    """Key chips with labels; hints with an action are clickable."""
+    out = []
+    for keys, label, action in hints:
+        keys = keys.replace("{p}", prefix).replace("[", "\\[")
+        chip = f"[bold $text on $panel] {keys} [/] {label}"     # key chip, then what it does
+        if action:
+            name, _, args = action.partition("(")
+            call = f"app.run('{name}'" + (", " + args.rstrip(")") if args else "") + ")"
+            chip = f"[@click={call}]{chip}[/]"
+        out.append(chip)
+    return "  ".join(out)
+
 
 KEY_NAMES = {"ctrl+b": "Ctrl+B", "ctrl+a": "Ctrl+A", "ctrl+space": "Ctrl+Space", "ctrl+backslash": "Ctrl+\\"}
 
@@ -118,10 +148,17 @@ class MindasTerminal(App[None]):
     TabPane { padding: 0; height: 1fr; }
     .columns { height: 1fr; }
     .column { width: 1fr; height: 1fr; }
-    #status { height: 1; background: $panel; }
-    #status-left { width: 1fr; }
-    #status-actions { width: auto; color: $text-muted; }
+    #status { height: 1; background: $surface; }
+    #status-left { width: auto; }
+    #status-hints { width: 1fr; padding: 0 1; color: $text-muted; text-wrap: nowrap; text-overflow: ellipsis;
+                    link-style: none; link-color: $text-muted; link-background: transparent;
+                    link-style-hover: bold; link-color-hover: $text; link-background-hover: $panel; }
     #status-right { width: auto; color: $text-muted; }
+    #tabs ContentTabs { height: 1; background: $surface; }
+    #tabs Underline { display: none; }
+    #tabs Tab { height: 1; padding: 0 2; color: $text-muted; }
+    #tabs Tab:hover { color: $text; background: $panel; }
+    #tabs Tab.-active { color: $text; background: $panel; text-style: bold; }
     """
     BINDINGS = [Binding("ctrl+q", "quit_app", "Quit", priority=True, show=False)]
 
@@ -154,7 +191,7 @@ class MindasTerminal(App[None]):
         yield TabbedContent(id="tabs")
         with Horizontal(id="status"):
             yield Static(id="status-left")
-            yield Static(STATUS_ACTIONS, id="status-actions")
+            yield Static(id="status-hints")
             yield Static(id="status-right")
 
     async def on_mount(self) -> None:
@@ -164,7 +201,7 @@ class MindasTerminal(App[None]):
         else:
             await self.action_new_tab()
         self._update_system()
-        self.set_interval(2.0, self._update_system)
+        self.set_interval(15.0, self._update_system)
 
     # autocomplete data
     def _load_history(self) -> suggest.History:
@@ -269,6 +306,7 @@ class MindasTerminal(App[None]):
         body = Horizontal(Vertical(pane, classes="column"), classes="columns")
         await self.tabbed.add_pane(TabPane(self._label(tab_id, pane), body, id=tab_id))
         self.tabbed.active = tab_id
+        self._update_chrome()
         pane.focus()
 
     def _tab_ids(self) -> list[str]:
@@ -332,6 +370,7 @@ class MindasTerminal(App[None]):
             await pane.parent.parent.mount(Vertical(new, classes="column"), after=pane.parent)
         else:
             await pane.parent.mount(new, after=pane)
+        self._update_chrome()
         new.focus()
 
     def action_focus(self, direction: str) -> None:
@@ -372,6 +411,7 @@ class MindasTerminal(App[None]):
                 col.display = col is pane.parent
             for p in pane.parent.query(TerminalPane):
                 p.display = p is pane
+        self._update_chrome()
         pane.focus()
         self._refresh_status()
 
@@ -413,6 +453,7 @@ class MindasTerminal(App[None]):
         if not self.all_panes():
             self.exit()
             return
+        self._update_chrome()
         nxt = self.current_pane()
         if nxt:
             nxt.focus()
@@ -555,39 +596,52 @@ class MindasTerminal(App[None]):
         self._refresh_status()
 
     def _refresh_status(self) -> None:
+        """Zellij-style bar: a mode badge, then the keys that work right now (clickable), then context."""
         try:
             left = self.query_one("#status-left", Static)
+            hints = self.query_one("#status-hints", Static)
         except Exception:  # noqa: BLE001 - not mounted yet
             return
-        t = Text()
-        t.append(" mindas ", style="bold #070b1a on #7aa2ff")
-        if self._prefix_armed:
-            t.append(f" {KEY_NAMES.get(self.prefix, self.prefix)} ", style="bold #070b1a on #fbbf24")
         pane = self.current_pane()
-        if pane is not None and pane.copy is not None:
-            t.append(" COPY ", style="bold #070b1a on #5eead4")
-        if self._zoomed:
-            t.append(" ZOOM ", style="bold #070b1a on #b18cff")
+        mode = ("PREFIX" if self._prefix_armed else "COPY" if pane is not None and pane.copy is not None
+                else "ZOOM" if self._zoomed else "NORMAL")
+        left.update(Text(f" {mode} ", style=MODE_STYLES[mode]))
+        hints.update(hint_markup(MODE_HINTS[mode], KEY_NAMES.get(self.prefix, self.prefix)))
+        self._update_context()
+
+    def _update_context(self) -> None:
+        try:
+            right = self.query_one("#status-right", Static)
+        except Exception:  # noqa: BLE001
+            return
+        ids = self._tab_ids()
+        pane = self.current_pane()
+        parts = []
         if pane is not None:
-            t.append(f"  {pane.shell.name}", style="#e6e9f5")
-            panes = len(self._tab_panes(self.tabbed.active))
-            if panes > 1:
-                t.append(f"  {panes} panes", style="#8b93b8")
-        left.update(t)
+            parts.append(pane.shell.name)
+        if len(ids) > 1 and self.tabbed.active in ids:
+            parts.append(f"tab {ids.index(self.tabbed.active) + 1}/{len(ids)}")
+        parts.append(time.strftime("%H:%M"))
+        right.update("  ·  ".join(parts) + " ")
 
     def _update_system(self) -> None:
-        try:
-            import psutil
+        self._update_context()
 
-            cpu, ram = psutil.cpu_percent(), psutil.virtual_memory().percent
-            self._sys = f"CPU {cpu:4.1f}%  RAM {ram:4.1f}%  {time.strftime('%H:%M')} "
-        except Exception:  # noqa: BLE001 - status is best effort
-            self._sys = time.strftime("%H:%M ")
-        try:
-            self.query_one("#status-right", Static).update(self._sys)
-        except Exception:  # noqa: BLE001
-            pass
+    def action_run(self, name: str, *args) -> None:
+        """Run an action from a clicked hint; a click also ends prefix mode."""
+        self._prefix_armed = False
+        result = getattr(self, f"action_{name}")(*args)
+        if hasattr(result, "__await__"):
+            self.run_worker(result, exclusive=False)
         self._refresh_status()
+
+    def _update_chrome(self) -> None:
+        """A tab with one pane shows it borderless, like a plain terminal; borders appear with splits."""
+        for tab_id in self._tab_ids():
+            panes = self._tab_panes(tab_id)
+            visible = [p for p in panes if p.display]
+            for p in panes:
+                p.set_class(len(visible) == 1, "solo")
 
 
 # Short alias used by tools/e2e.py.

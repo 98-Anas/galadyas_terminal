@@ -67,6 +67,7 @@ class TerminalPane(Widget, can_focus=True):
     DEFAULT_CSS = """
     TerminalPane { width: 1fr; height: 1fr; background: $background; border: round $panel; border-title-color: $text-muted; }
     TerminalPane:focus { border: round $accent; border-title-color: $accent; }
+    TerminalPane.solo, TerminalPane.solo:focus { border: none; }
     """
 
     class Exited(Message):

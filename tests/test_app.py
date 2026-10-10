@@ -134,21 +134,28 @@ async def test_home_tools_and_manual_navigation():
         assert type(app.screen).__name__ == "HomeScreen"
 
 
-async def test_status_bar_words_are_clickable():
+async def test_status_bar_hints_borders_and_modes():
+    from mindas_terminal.app import MODE_HINTS
+
     app = MindasTerminal(SHELL, settings=NO_HOME)
     async with app.run_test(size=(140, 36)) as pilot:
         await asyncio.sleep(1.0)
-        await app.run_action("split('right')")                 # same action the "split" word runs
+        assert app.current_pane().has_class("solo")             # one pane: no border, like a plain terminal
+        await app.run_action("run('split', 'right')")           # what clicking the "split" hint does
         await asyncio.sleep(0.3)
         assert len(app.all_panes()) == 2
+        assert not any(p.has_class("solo") for p in app.all_panes())
         right = app.focused
-        await pilot.press("ctrl+b", "h")                       # vim-style: h moves left, never opens home
+        await pilot.press("ctrl+b")
+        assert "PREFIX" in str(app.query_one("#status-left").render())
+        await pilot.press("h")                                  # vim-style: h moves left, never opens home
         await pilot.pause()
         assert app.focused is not right and type(app.screen).__name__ != "HomeScreen"
-        from mindas_terminal.app import STATUS_ACTIONS
-        import re
-        for action in re.findall(r"@click=app\.(\w+)", STATUS_ACTIONS):
-            assert hasattr(app, f"action_{action}"), action
+        assert "NORMAL" in str(app.query_one("#status-left").render())
+        for hints in MODE_HINTS.values():
+            for _, _, action in hints:
+                if action:
+                    assert hasattr(app, "action_" + action.split("(")[0]), action
 
 
 async def test_autocomplete_suggests_and_accepts():

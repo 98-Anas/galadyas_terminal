@@ -3,6 +3,20 @@
 All notable changes are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] - 2026-10-11
+
+A cleaner, calmer interface, shaped by how people use tmux and Zellij.
+
+### Changed
+
+- Status bar shows the mode (NORMAL, PREFIX, COPY, ZOOM) and the keys that work right now, as clickable key
+  chips, in the style users praise in Zellij. It replaces the fixed word list and the CPU and RAM readout.
+- A tab with one pane shows it without a border, like a plain terminal; borders appear when you split.
+- Compact one-line tab bar.
+- Home window: simple title, no host name, calmer focus style.
+- Screenshots rendered with a real browser engine, so text and borders align exactly, from a demo
+  environment checked for personal information (`tools/screenshots.py`).
+
 ## [0.2.0] - 2026-10-11
 
 Smarter, smoother, still simple: nothing new to learn.

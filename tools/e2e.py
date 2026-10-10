@@ -119,7 +119,7 @@ async def bash() -> None:
         await wait_for(pane, "SIZE-2 ")
         text = screen_text(pane)
         got = text[text.find("SIZE-2 "):].split()[1]
-        check("Resize reaches the shell", got.startswith("78x"), got + " (80 columns minus the pane border)")
+        check("Resize reaches the shell", got.startswith("80x"), got + " (a single pane uses the full width)")
         app.save_screenshot(filename="e2e-bash.svg", path=str(OUT))
 
     await run(BASH, [basics, unicode, throughput, keys, fullscreen, resize])

@@ -67,7 +67,7 @@ class Prompt(ModalScreen[str | None]):
 
 
 class Help(ModalScreen[None]):
-    DEFAULT_CSS = "Help { align: center middle; }" + DIALOG_CSS + "Help .dialog { width: 112; }"
+    DEFAULT_CSS = "Help { align: center middle; }" + DIALOG_CSS + "Help .dialog { width: 104; }"
     BINDINGS = [Binding("escape,q,question_mark,f1", "dismiss", "Close")]
 
     def __init__(self, text: str) -> None:

@@ -90,7 +90,7 @@ Enter with `prefix [`, `Shift+PageUp`, or the mouse wheel.
 | A card in the home window | Open that shell or tool |
 | A tab | Go to the tab |
 | A pane | Focus it |
-| `home`, `+tab`, `split`, `zoom`, `tools`, `tasks`, `manual`, `keys` in the status bar | Run that action |
+| A key hint in the status bar | Run it (the hints change with the mode) |
 | A page or a link in the manual | Open it (web links are copied, not opened) |
 | Mouse wheel in a pane | Copy mode (or arrow keys in full-screen programs) |
 
