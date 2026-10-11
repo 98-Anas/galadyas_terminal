@@ -1,4 +1,4 @@
-# mindas terminal wiki
+# galadyas terminal wiki
 
 A universal terminal for Windows and Linux. Real shells (bash first, also on Windows), tabs and split panes,
 vim-style copy mode, a task manager with GPU use, and offline toolkits of curated commands for eleven fields.

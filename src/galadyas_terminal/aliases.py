@@ -1,6 +1,6 @@
 """Opt-in aliases and helper functions for bash/zsh and PowerShell.
 
-Nothing is installed automatically. Print them with `mindas-terminal --aliases bash` (or `powershell`),
+Nothing is installed automatically. Print them with `galadyas-terminal --aliases bash` (or `powershell`),
 read them, then add them to your shell yourself. Every helper is local-only: none sends data anywhere
 except `myip`, which asks a public service for your address and says so.
 """
@@ -31,9 +31,9 @@ ALIASES: tuple[Alias, ...] = (
     A("cdg", "navigation", "go to the top of the git repository", 'cd "$(git rev-parse --show-toplevel)"',
       'Set-Location (git rev-parse --show-toplevel)'),
     A("bm", "navigation", "bookmark this folder as NAME: bm work",
-      'mkdir -p ~/.config/mindas-terminal && echo "$1=$PWD" >> ~/.config/mindas-terminal/bookmarks && echo "saved $1"'),
+      'mkdir -p ~/.config/galadyas-terminal && echo "$1=$PWD" >> ~/.config/galadyas-terminal/bookmarks && echo "saved $1"'),
     A("go", "navigation", "jump to a bookmark: go work",
-      'local d; d="$(grep -m1 "^$1=" ~/.config/mindas-terminal/bookmarks 2>/dev/null | cut -d= -f2-)"; [ -n "$d" ] && cd "$d" || echo "no bookmark: $1"'),
+      'local d; d="$(grep -m1 "^$1=" ~/.config/galadyas-terminal/bookmarks 2>/dev/null | cut -d= -f2-)"; [ -n "$d" ] && cd "$d" || echo "no bookmark: $1"'),
     # listing and files
     A("ll", "files", "long list, human sizes", "=ls -lAh --color=auto", "Get-ChildItem -Force"),
     A("lt", "files", "newest files last", "=ls -lAhtr --color=auto",
@@ -165,8 +165,8 @@ GROUPS = ("linux", "navigation", "files", "safety", "system", "network", "git", 
 
 
 def bash() -> str:
-    out = ["# mindas-terminal aliases for bash and zsh. Review before use.",
-           "# Add to ~/.bashrc:  eval \"$(mindas-terminal --aliases bash)\"", ""]
+    out = ["# galadyas-terminal aliases for bash and zsh. Review before use.",
+           "# Add to ~/.bashrc:  eval \"$(galadyas-terminal --aliases bash)\"", ""]
     for g in GROUPS:
         out.append(f"# {g}")
         for a in (a for a in ALIASES if a.group == g and a.bash):
@@ -175,13 +175,13 @@ def bash() -> str:
             elif a.name.isidentifier() or a.name.replace("_", "").isalnum():
                 out.append(f"{a.name}() {{ {a.bash}; }}")
         out.append("")
-    out.append("malias() { mindas-terminal --aliases list; }")
+    out.append("malias() { galadyas-terminal --aliases list; }")
     return "\n".join(out) + "\n"
 
 
 def powershell(style: str = "linux") -> str:
-    out = ["# mindas-terminal functions for PowerShell. Review before use.",
-           "# Add to $PROFILE:  mindas-terminal --aliases powershell | Out-String | Invoke-Expression", ""]
+    out = ["# galadyas-terminal functions for PowerShell. Review before use.",
+           "# Add to $PROFILE:  galadyas-terminal --aliases powershell | Out-String | Invoke-Expression", ""]
     for g in GROUPS:
         pool = ALIASES + (LINUX_STYLE if style == "linux" else ())
         items = [a for a in pool if a.group == g and a.powershell]

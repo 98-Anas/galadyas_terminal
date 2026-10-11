@@ -1,12 +1,13 @@
 """User settings: a small TOML file, read as data only (never executed). Command-line options win.
 
-Location: %APPDATA%\\mindas-terminal\\config.toml on Windows, $XDG_CONFIG_HOME/mindas-terminal/config.toml
+Location: %APPDATA%\\galadyas-terminal\\config.toml on Windows, $XDG_CONFIG_HOME/galadyas-terminal/config.toml
 (default ~/.config) elsewhere. Unknown keys and wrong types are ignored with a warning, never fatal.
 """
 
 from __future__ import annotations
 
 import os
+import shutil
 import sys
 import tomllib
 from dataclasses import asdict, dataclass, fields, replace  # noqa: F401 - replace is re-exported
@@ -36,7 +37,14 @@ def path() -> Path:
         base = Path(os.environ.get("APPDATA") or Path.home() / "AppData" / "Roaming")
     else:
         base = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config")
-    return base / "mindas-terminal" / "config.toml"
+    folder = base / "galadyas-terminal"
+    legacy = base / "mindas-terminal"          # name before 0.4.0
+    if not folder.exists() and legacy.is_dir():
+        try:
+            shutil.copytree(legacy, folder)
+        except OSError:
+            return legacy / "config.toml"
+    return folder / "config.toml"
 
 
 def parse(text: str) -> tuple[Settings, list[str]]:
@@ -80,7 +88,7 @@ def load() -> tuple[Settings, list[str]]:
 
 
 def dumps(s: Settings) -> str:
-    lines = ["# mindas-terminal settings. Data only; see the wiki page Configuration."]
+    lines = ["# galadyas-terminal settings. Data only; see the wiki page Configuration."]
     for key, value in asdict(s).items():
         if isinstance(value, bool):
             lines.append(f"{key} = {'true' if value else 'false'}")

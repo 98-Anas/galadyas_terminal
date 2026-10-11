@@ -15,9 +15,9 @@ labels: bug
 
 **Environment**
 
-- `mindas-terminal --version`:
+- `galadyas-terminal --version`:
 - Operating system:
-- Shell (from `mindas-terminal --list-shells`):
+- Shell (from `galadyas-terminal --list-shells`):
 - Host terminal (for example Windows Terminal, GNOME Terminal):
 
 Please remove personal information (user names, host names, paths, tokens) from logs and screenshots.

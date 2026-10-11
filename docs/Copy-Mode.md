@@ -56,7 +56,7 @@ The text goes to the **system clipboard** and to an internal buffer. Paste it in
 anywhere else with your system's paste. Without a selection, `y` copies the current line.
 
 The system clipboard is reached through the host terminal (OSC 52). Windows Terminal and most modern Linux
-terminals support it. If yours does not, `prefix ]` still works inside mindas terminal.
+terminals support it. If yours does not, `prefix ]` still works inside galadyas terminal.
 
 ## Examples
 

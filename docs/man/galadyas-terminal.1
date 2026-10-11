@@ -1,8 +1,8 @@
-.TH MINDAS\-TERMINAL 1 "2026-10-11" "mindas-terminal 0.3.0" "User Commands"
+.TH GALADYAS\-TERMINAL 1 "2026-10-11" "galadyas-terminal 0.4.0" "User Commands"
 .SH NAME
-mindas\-terminal \- universal terminal for Windows and Linux with tabs, splits, copy mode, task manager and toolkits
+galadyas\-terminal \- universal terminal for Windows and Linux with tabs, splits, copy mode, task manager and toolkits
 .SH SYNOPSIS
-.B mindas\-terminal
+.B galadyas\-terminal
 [\fIOPTIONS\fR]
 .SH DESCRIPTION
 Runs real shells (bash first, also on Windows through Git Bash or WSL) in a text interface with tabs and split panes controlled by a tmux\-style prefix key, vim\-style copy mode over the scrollback, a task manager with GPU use, and offline toolkits of curated commands for eleven fields. Toolkit commands are typed at the prompt and never run automatically.
@@ -172,20 +172,20 @@ Use these only on systems you own or are authorised in writing to test. Unauthor
 89 opt\-in aliases and helper functions. Nothing is installed automatically. Try them with:
 .PP
 .nf
-eval "$(mindas\-terminal \-\-aliases bash)"
-mindas\-terminal \-\-aliases powershell | Out\-String | Invoke\-Expression
+eval "$(galadyas\-terminal \-\-aliases bash)"
+galadyas\-terminal \-\-aliases powershell | Out\-String | Invoke\-Expression
 .fi
 .SH FILES
 .TP
-\fI%APPDATA%\\mindas\-terminal\\config.toml\fR (Windows), \fI~/.config/mindas\-terminal/config.toml\fR (Linux)
+\fI%APPDATA%\\galadyas\-terminal\\config.toml\fR (Windows), \fI~/.config/galadyas\-terminal/config.toml\fR (Linux)
 Settings, TOML, read as data only. Keys: shell, prefix, scrollback, profile, theme, alias_style, confirm_multiline_paste, show_home, remember_history.
 .SH ENVIRONMENT
-Shells start with \fBTERM=xterm\-256color\fR, \fBCOLORTERM=truecolor\fR and \fBTERM_PROGRAM=mindas\-terminal\fR added to the environment. \fBXDG_CONFIG_HOME\fR and \fBAPPDATA\fR locate the settings file.
+Shells start with \fBTERM=xterm\-256color\fR, \fBCOLORTERM=truecolor\fR and \fBTERM_PROGRAM=galadyas\-terminal\fR added to the environment. \fBXDG_CONFIG_HOME\fR and \fBAPPDATA\fR locate the settings file.
 .SH SECURITY
 No network access, no telemetry, scrollback in memory only. Pasted text is cleaned of control and invisible characters; a paste that would run several commands asks first. Only fixed\-format replies are sent to programs. Programs are never looked up in the current folder. Use the security toolkit only on systems you own or are authorised in writing to test.
 .SH EXIT STATUS
 0 on success, 1 when no shell is found, 2 for an unknown shell name.
 .SH SEE ALSO
-\fBtmux\fR(1), \fBvim\fR(1), \fBbash\fR(1). The full manual is inside the app (prefix m) and at https://github.com/98\-Anas/mindas_terminal/wiki
+\fBtmux\fR(1), \fBvim\fR(1), \fBbash\fR(1). The full manual is inside the app (prefix m) and at https://github.com/98\-Anas/galadyas_terminal/wiki
 .SH AUTHOR
 Anas Ayman Elgallad.

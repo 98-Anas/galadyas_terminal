@@ -1,11 +1,11 @@
 # Security
 
-A terminal sees passwords, keys and production systems. This page describes what mindas terminal protects
+A terminal sees passwords, keys and production systems. This page describes what galadyas terminal protects
 against, how, and what remains your responsibility.
 
 ## Ethical use
 
-mindas terminal is built for people who protect, operate, research and learn: engineers, administrators,
+galadyas terminal is built for people who protect, operate, research and learn: engineers, administrators,
 analysts, students and authorised security testers. The security toolkit covers defence and authorised
 testing only. **Use it only on systems you own or are authorised in writing to test.** Unauthorised scanning
 or access is illegal in most countries. The project does not accept contributions whose purpose is to attack
@@ -46,7 +46,7 @@ systems without consent, evade detection, or harm people.
 - Programs you run in the terminal have your permissions. The terminal cannot make an unsafe command safe.
 - Copy mode puts text on the system clipboard, where other applications can read it. Avoid copying secrets.
 - Screen contents may include secrets; lock your screen when you leave.
-- If you add aliases to your profile, they run as you; read them first (`mindas-terminal --aliases bash | less`).
+- If you add aliases to your profile, they run as you; read them first (`galadyas-terminal --aliases bash | less`).
 - Turning off `confirm_multiline_paste` removes a protection; keep it on unless you understand the risk.
 
 ## Supported versions
@@ -60,8 +60,8 @@ systems without consent, evade detection, or harm people.
 
 Please **do not open a public issue** for security problems. Use GitHub's private vulnerability reporting
 (*Security* tab, *Report a vulnerability*) on the
-[repository](https://github.com/98-Anas/mindas_terminal/security). Include steps to reproduce, the version
-(`mindas-terminal --version`), your platform and shell.
+[repository](https://github.com/98-Anas/galadyas_terminal/security). Include steps to reproduce, the version
+(`galadyas-terminal --version`), your platform and shell.
 
 You will get an acknowledgement within 7 days. Fixes are released as soon as they are ready, and reporters
 are credited in the changelog unless they prefer not to be.

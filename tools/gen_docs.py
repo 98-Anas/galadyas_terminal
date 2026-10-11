@@ -8,7 +8,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from mindas_terminal import aliases, manpage, toolkit
+from galadyas_terminal import aliases, manpage, toolkit
 
 DOCS = Path(__file__).resolve().parent.parent / "docs"
 
@@ -19,7 +19,7 @@ def _cell(text: str) -> str:
 
 def toolkits_page() -> str:
     out = ["# Toolkit Reference", "",
-           "Generated from `src/mindas_terminal/toolkit.py`. Open the toolkits with `prefix g` "
+           "Generated from `src/galadyas_terminal/toolkit.py`. Open the toolkits with `prefix g` "
            "(or `Toolkits` in the command palette), type a few words, press Enter.", "",
            "Commands are **inserted at the prompt and never run**. Values you type for `<placeholders>` are "
            "quoted so they stay one argument. Platform `any` means both Windows (Git Bash or PowerShell) and Linux.",
@@ -37,12 +37,12 @@ def toolkits_page() -> str:
 
 def aliases_page() -> str:
     out = ["# Aliases Reference", "",
-           "Generated from `src/mindas_terminal/aliases.py`. These are **opt-in**: nothing changes in your "
+           "Generated from `src/galadyas_terminal/aliases.py`. These are **opt-in**: nothing changes in your "
            "shell until you add them yourself.", "",
-           "```bash", "# bash or zsh: try them in the current shell", 'eval "$(mindas-terminal --aliases bash)"',
+           "```bash", "# bash or zsh: try them in the current shell", 'eval "$(galadyas-terminal --aliases bash)"',
            "# keep them: add the same line to ~/.bashrc or ~/.zshrc", "```", "",
            "```powershell", "# PowerShell: try them in the current session",
-           "mindas-terminal --aliases powershell | Out-String | Invoke-Expression",
+           "galadyas-terminal --aliases powershell | Out-String | Invoke-Expression",
            "# keep them: add the same line to $PROFILE", "```", "",
            "`--alias-style linux` (default) also gives PowerShell the Linux command names in the first table, "
            "so the same muscle memory works everywhere. `--alias-style native` leaves them out. "
@@ -60,7 +60,7 @@ def aliases_page() -> str:
 
 
 PAGES = {"Toolkit-Reference.md": toolkits_page, "Aliases-Reference.md": aliases_page,
-         "man/mindas-terminal.1": manpage.render}
+         "man/galadyas-terminal.1": manpage.render}
 
 
 def main(check: bool = False) -> int:

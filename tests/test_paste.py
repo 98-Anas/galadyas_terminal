@@ -1,4 +1,4 @@
-from mindas_terminal import paste
+from galadyas_terminal import paste
 
 
 def test_single_line_needs_no_confirmation():

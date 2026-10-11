@@ -1,4 +1,4 @@
-from mindas_terminal import config
+from galadyas_terminal import config
 
 
 def test_defaults_when_empty():
@@ -29,3 +29,22 @@ def test_round_trip_and_escaping(tmp_path, monkeypatch):
     config.save(original)
     loaded, warnings = config.load()
     assert loaded == original and warnings == []
+
+
+def test_settings_from_the_former_name_are_migrated(tmp_path, monkeypatch):
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    legacy = tmp_path / "mindas-terminal"
+    legacy.mkdir()
+    (legacy / "config.toml").write_text('theme = "light"\n', encoding="utf-8")
+    p = config.path()
+    assert p == tmp_path / "galadyas-terminal" / "config.toml"
+    assert p.read_text(encoding="utf-8") == 'theme = "light"\n'
+    assert (legacy / "config.toml").exists()  # the original is left untouched
+
+
+def test_fresh_install_uses_the_new_folder(tmp_path, monkeypatch):
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    assert config.path() == tmp_path / "galadyas-terminal" / "config.toml"
+    assert not (tmp_path / "mindas-terminal").exists()

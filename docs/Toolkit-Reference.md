@@ -1,6 +1,6 @@
 # Toolkit Reference
 
-Generated from `src/mindas_terminal/toolkit.py`. Open the toolkits with `prefix g` (or `Toolkits` in the command palette), type a few words, press Enter.
+Generated from `src/galadyas_terminal/toolkit.py`. Open the toolkits with `prefix g` (or `Toolkits` in the command palette), type a few words, press Enter.
 
 Commands are **inserted at the prompt and never run**. Values you type for `<placeholders>` are quoted so they stay one argument. Platform `any` means both Windows (Git Bash or PowerShell) and Linux.
 

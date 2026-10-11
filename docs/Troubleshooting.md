@@ -1,15 +1,15 @@
 # Troubleshooting
 
-## `mindas-terminal` is not found after installing
+## `galadyas-terminal` is not found after installing
 
 Open a new terminal. If it is still missing, run `uv tool update-shell` (or `pipx ensurepath`) once, then open
 a new terminal. The command lives in `~/.local/bin` (Linux) or `%USERPROFILE%\.local\bin` (Windows).
 
 ## It opens PowerShell, but I want bash on Windows
 
-Install [Git for Windows](https://git-scm.com/download/win), then check `mindas-terminal --list-shells`.
+Install [Git for Windows](https://git-scm.com/download/win), then check `galadyas-terminal --list-shells`.
 Git Bash is found in `C:\Program Files\Git`. For WSL, install a distribution with `wsl --install`.
-To choose explicitly: `mindas-terminal --shell "git bash"` or `shell = "Git Bash"` in the settings file.
+To choose explicitly: `galadyas-terminal --shell "git bash"` or `shell = "Git Bash"` in the settings file.
 
 ## Keys do nothing or do something else
 
@@ -27,7 +27,7 @@ Use a host terminal with true colour (Windows Terminal, most Linux terminals). P
 ## Copying does not reach the system clipboard
 
 The system clipboard is set through the host terminal (OSC 52). Windows Terminal supports it. Some Linux
-terminals need it enabled, and tmux needs `set -g set-clipboard on`. Inside mindas terminal, `prefix ]` pastes
+terminals need it enabled, and tmux needs `set -g set-clipboard on`. Inside galadyas terminal, `prefix ]` pastes
 the last copy regardless.
 
 ## A paste asks for confirmation every time
@@ -54,9 +54,9 @@ steps.
 ## Warnings about the settings file on start-up
 
 The message names the setting. Fix or remove it; the default is used meanwhile. Run
-`mindas-terminal --init-config` on a fresh system to get a valid file.
+`galadyas-terminal --init-config` on a fresh system to get a valid file.
 
 ## Reporting a bug
 
-Open an issue with: `mindas-terminal --version`, your operating system, the shell, the host terminal, what
+Open an issue with: `galadyas-terminal --version`, your operating system, the shell, the host terminal, what
 you did, what you expected, and what happened. For security problems, see [Security](Security) instead.

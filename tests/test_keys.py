@@ -1,4 +1,4 @@
-from mindas_terminal.keys import encode
+from galadyas_terminal.keys import encode
 
 
 def test_special_keys():

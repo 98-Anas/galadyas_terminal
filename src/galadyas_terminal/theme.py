@@ -14,7 +14,7 @@ PALETTES = {
                      warning="#ffff00", error="#ff5555"),
 }
 COLORS = PALETTES["space"]
-NAME = "mindas-space"
+NAME = "galadyas-space"
 
 
 def apply(app, name: str = "space") -> None:
@@ -22,6 +22,6 @@ def apply(app, name: str = "space") -> None:
     from textual.theme import Theme
 
     for key, palette in PALETTES.items():
-        if f"mindas-{key}" not in app.available_themes:
-            app.register_theme(Theme(name=f"mindas-{key}", variables={"button-focus-text-style": "bold"}, **palette))
-    app.theme = f"mindas-{name if name in PALETTES else 'space'}"
+        if f"galadyas-{key}" not in app.available_themes:
+            app.register_theme(Theme(name=f"galadyas-{key}", variables={"button-focus-text-style": "bold"}, **palette))
+    app.theme = f"galadyas-{name if name in PALETTES else 'space'}"

@@ -10,10 +10,10 @@ from pathlib import Path
 
 import psutil
 
-from mindas_terminal import shells
-from mindas_terminal.app import TerminalApp
-from mindas_terminal.config import Settings
-from mindas_terminal.widget import TerminalPane
+from galadyas_terminal import shells
+from galadyas_terminal.app import TerminalApp
+from galadyas_terminal.config import Settings
+from galadyas_terminal.widget import TerminalPane
 
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
 

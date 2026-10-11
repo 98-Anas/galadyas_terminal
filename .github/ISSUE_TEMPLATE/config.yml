@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Report a security vulnerability
-    url: https://github.com/98-Anas/mindas_terminal/security/advisories/new
+    url: https://github.com/98-Anas/galadyas_terminal/security/advisories/new
     about: Please report security problems privately.
   - name: Documentation
-    url: https://github.com/98-Anas/mindas_terminal/tree/main/docs
+    url: https://github.com/98-Anas/galadyas_terminal/tree/main/docs
     about: Installation, usage, configuration and troubleshooting.

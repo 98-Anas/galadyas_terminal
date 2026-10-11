@@ -1,4 +1,4 @@
-from mindas_terminal import shells
+from galadyas_terminal import shells
 
 
 def test_windows_prefers_git_bash():

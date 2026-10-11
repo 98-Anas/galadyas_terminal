@@ -6,7 +6,7 @@ SRC="$(cd "$(dirname "$0")/.." && pwd)"
 export PATH="$HOME/.local/bin:$PATH"
 command -v uv >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh -s -- -q
 export PATH="$HOME/.local/bin:$PATH"
-WORK="$HOME/.mindas-terminal-ci"
+WORK="$HOME/.galadyas-terminal-ci"
 rm -rf "$WORK" && mkdir -p "$WORK"
 (cd "$SRC" && tar --exclude=.venv --exclude=.git -cf - .) | tar -xf - -C "$WORK"
 cd "$WORK"

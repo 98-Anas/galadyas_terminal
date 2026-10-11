@@ -3,7 +3,7 @@ import sys
 
 import pytest
 
-from mindas_terminal import config, suggest
+from galadyas_terminal import config, suggest
 
 
 def test_line_tracker_follows_typing_and_gives_up_when_unsure():

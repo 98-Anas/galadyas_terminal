@@ -5,8 +5,8 @@ Ten minutes from first launch to working comfortably.
 ## 1. Launch
 
 ```bash
-mindas-terminal                     # best shell found: bash first, also on Windows
-mindas-terminal --shell powershell  # or pick one: see mindas-terminal --list-shells
+galadyas-terminal                     # best shell found: bash first, also on Windows
+galadyas-terminal --shell powershell  # or pick one: see galadyas-terminal --list-shells
 ```
 
 You see the **home window**: every shell found on the machine (including each WSL distribution) and the
@@ -64,7 +64,7 @@ Type a few words, for example `docker logs` or `slurm gpu` or `tls cert`, and pr
 placeholders such as `<host>`, you are asked for each value. The command is then typed at your prompt and
 **not run**, so you can check it and press Enter yourself.
 
-Start with your own field first: `mindas-terminal --profile hpc` (or pick `Profile: ...` in the command palette).
+Start with your own field first: `galadyas-terminal --profile hpc` (or pick `Profile: ...` in the command palette).
 Details: [Toolkits](Toolkits).
 
 ## 5. Watch your machine
@@ -81,8 +81,8 @@ themes, prefix keys, profiles, and *Save settings* to keep your choices.
 ## 7. Optional: helpful aliases
 
 ```bash
-mindas-terminal --aliases list                 # see what is available
-eval "$(mindas-terminal --aliases bash)"       # try them now in bash
+galadyas-terminal --aliases list                 # see what is available
+eval "$(galadyas-terminal --aliases bash)"       # try them now in bash
 ```
 
 You get shortcuts such as `mkcd`, `up 3`, `extract`, `ports`, `gs`, `dps`, `sq`, `gpu`, and on PowerShell also
@@ -91,8 +91,8 @@ Linux names such as `touch`, `which`, `grep`, `head`, `df`. Details: [Aliases](A
 ## 8. The manual, always with you
 
 `Ctrl+B` then `m` opens this manual inside the app, offline. Click a page or a link, type to search, `b` goes
-back. On Linux, `mindas-terminal --man | man -l -` shows the classic man page; see [Installation](Installation)
-to install it for `man mindas-terminal`.
+back. On Linux, `galadyas-terminal --man | man -l -` shows the classic man page; see [Installation](Installation)
+to install it for `man galadyas-terminal`.
 
 ## Next
 

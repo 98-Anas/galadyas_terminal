@@ -1,16 +1,16 @@
 # Aliases Reference
 
-Generated from `src/mindas_terminal/aliases.py`. These are **opt-in**: nothing changes in your shell until you add them yourself.
+Generated from `src/galadyas_terminal/aliases.py`. These are **opt-in**: nothing changes in your shell until you add them yourself.
 
 ```bash
 # bash or zsh: try them in the current shell
-eval "$(mindas-terminal --aliases bash)"
+eval "$(galadyas-terminal --aliases bash)"
 # keep them: add the same line to ~/.bashrc or ~/.zshrc
 ```
 
 ```powershell
 # PowerShell: try them in the current session
-mindas-terminal --aliases powershell | Out-String | Invoke-Expression
+galadyas-terminal --aliases powershell | Out-String | Invoke-Expression
 # keep them: add the same line to $PROFILE
 ```
 

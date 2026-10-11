@@ -1,7 +1,7 @@
 """The man page (roff), built from the same data as the app so it can never be out of date.
 
-    mindas-terminal --man | man -l -                     # read it now (Linux)
-    mindas-terminal --man > ~/.local/share/man/man1/mindas-terminal.1   # install for `man mindas-terminal`
+    galadyas-terminal --man | man -l -                     # read it now (Linux)
+    galadyas-terminal --man > ~/.local/share/man/man1/galadyas-terminal.1   # install for `man galadyas-terminal`
 """
 
 from __future__ import annotations
@@ -39,10 +39,10 @@ KEYS = [
 
 def render() -> str:
     out = [
-        f'.TH MINDAS\\-TERMINAL 1 "{RELEASED}" "mindas-terminal {__version__}" "User Commands"',
-        ".SH NAME", "mindas\\-terminal \\- universal terminal for Windows and Linux with tabs, splits, "
+        f'.TH GALADYAS\\-TERMINAL 1 "{RELEASED}" "galadyas-terminal {__version__}" "User Commands"',
+        ".SH NAME", "galadyas\\-terminal \\- universal terminal for Windows and Linux with tabs, splits, "
         "copy mode, task manager and toolkits",
-        ".SH SYNOPSIS", ".B mindas\\-terminal", "[\\fIOPTIONS\\fR]",
+        ".SH SYNOPSIS", ".B galadyas\\-terminal", "[\\fIOPTIONS\\fR]",
         ".SH DESCRIPTION",
         "Runs real shells (bash first, also on Windows through Git Bash or WSL) in a text interface with tabs "
         "and split panes controlled by a tmux\\-style prefix key, vim\\-style copy mode over the scrollback, a "
@@ -81,14 +81,14 @@ def render() -> str:
     out += [".PP", _esc(toolkit.SECURITY_NOTICE)]
     out += [".SH ALIASES", f"{len(aliases.ALIASES) + len(aliases.LINUX_STYLE)} opt\\-in aliases and helper "
             "functions. Nothing is installed automatically. Try them with:",
-            ".PP", ".nf", 'eval "$(mindas\\-terminal \\-\\-aliases bash)"',
-            "mindas\\-terminal \\-\\-aliases powershell | Out\\-String | Invoke\\-Expression", ".fi"]
-    out += [".SH FILES", ".TP", "\\fI%APPDATA%\\\\mindas\\-terminal\\\\config.toml\\fR (Windows), "
-            "\\fI~/.config/mindas\\-terminal/config.toml\\fR (Linux)",
+            ".PP", ".nf", 'eval "$(galadyas\\-terminal \\-\\-aliases bash)"',
+            "galadyas\\-terminal \\-\\-aliases powershell | Out\\-String | Invoke\\-Expression", ".fi"]
+    out += [".SH FILES", ".TP", "\\fI%APPDATA%\\\\galadyas\\-terminal\\\\config.toml\\fR (Windows), "
+            "\\fI~/.config/galadyas\\-terminal/config.toml\\fR (Linux)",
             "Settings, TOML, read as data only. Keys: " + ", ".join(
                 f.name for f in config.fields(config.Settings)) + "."]
     out += [".SH ENVIRONMENT", "Shells start with \\fBTERM=xterm\\-256color\\fR, \\fBCOLORTERM=truecolor\\fR and "
-            "\\fBTERM_PROGRAM=mindas\\-terminal\\fR added to the environment. \\fBXDG_CONFIG_HOME\\fR and "
+            "\\fBTERM_PROGRAM=galadyas\\-terminal\\fR added to the environment. \\fBXDG_CONFIG_HOME\\fR and "
             "\\fBAPPDATA\\fR locate the settings file."]
     out += [".SH SECURITY", "No network access, no telemetry, scrollback in memory only. Pasted text is "
             "cleaned of control and invisible characters; a paste that would run several commands asks first. "
@@ -96,6 +96,6 @@ def render() -> str:
             "Use the security toolkit only on systems you own or are authorised in writing to test."]
     out += [".SH EXIT STATUS", "0 on success, 1 when no shell is found, 2 for an unknown shell name."]
     out += [".SH SEE ALSO", "\\fBtmux\\fR(1), \\fBvim\\fR(1), \\fBbash\\fR(1). The full manual is inside the app "
-            "(prefix m) and at https://github.com/98\\-Anas/mindas_terminal/wiki"]
+            "(prefix m) and at https://github.com/98\\-Anas/galadyas_terminal/wiki"]
     out += [".SH AUTHOR", "Anas Ayman Elgallad."]
     return "\n".join(out) + "\n"

@@ -1,4 +1,4 @@
-**mindas terminal**
+**galadyas terminal**
 
 - [Home](Home)
 - [Installation](Installation)

@@ -13,19 +13,19 @@ with *Save settings*.
 
 | Platform | Location |
 |---|---|
-| Windows | `%APPDATA%\mindas-terminal\config.toml` |
-| Linux | `$XDG_CONFIG_HOME/mindas-terminal/config.toml` (usually `~/.config/mindas-terminal/config.toml`) |
+| Windows | `%APPDATA%\galadyas-terminal\config.toml` |
+| Linux | `$XDG_CONFIG_HOME/galadyas-terminal/config.toml` (usually `~/.config/galadyas-terminal/config.toml`) |
 
 Create it with the defaults:
 
 ```bash
-mindas-terminal --init-config
+galadyas-terminal --init-config
 ```
 
 Example:
 
 ```toml
-# mindas-terminal settings. Data only.
+# galadyas-terminal settings. Data only.
 shell = "Git Bash"              # a name from --list-shells; empty = best found (bash first)
 prefix = "ctrl+a"               # ctrl+b (default), ctrl+a, ctrl+space, ctrl+backslash
 scrollback = 20000              # lines kept per pane, 0 to 1000000
@@ -87,6 +87,6 @@ Each shell starts with your environment plus:
 |---|---|---|
 | `TERM` | `xterm-256color` | Programs use colours and the right keys |
 | `COLORTERM` | `truecolor` | Programs may use 24-bit colour |
-| `TERM_PROGRAM` | `mindas-terminal` | Scripts can tell where they run |
+| `TERM_PROGRAM` | `galadyas-terminal` | Scripts can tell where they run |
 
-In your `.bashrc` you can check `[ "$TERM_PROGRAM" = mindas-terminal ]` to set things only inside this app.
+In your `.bashrc` you can check `[ "$TERM_PROGRAM" = galadyas-terminal ]` to set things only inside this app.

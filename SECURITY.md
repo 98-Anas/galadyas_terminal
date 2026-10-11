@@ -5,7 +5,7 @@
 Please report security problems **privately**, not in public issues: use GitHub's private vulnerability
 reporting on this repository (*Security* tab, *Report a vulnerability*).
 
-Include the version (`mindas-terminal --version`), your operating system, shell and host terminal, and the
+Include the version (`galadyas-terminal --version`), your operating system, shell and host terminal, and the
 steps to reproduce. You will get an acknowledgement within 7 days. Reporters are credited in the changelog
 unless they prefer otherwise.
 

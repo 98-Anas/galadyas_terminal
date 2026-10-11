@@ -40,7 +40,7 @@ Windows with WDDM drivers, per-process GPU memory may be unavailable; the totals
 ## Ending processes safely
 
 - Both `k` and `K` show the full command line and ask for confirmation. The safe choice, *Cancel*, has focus.
-- System processes (PID 0, 1 and 4) and mindas terminal itself are refused.
+- System processes (PID 0, 1 and 4) and galadyas terminal itself are refused.
 - Ending another user's or a system process needs administrator or root rights; you get a clear message
   instead of an error.
 

@@ -86,9 +86,9 @@ async def capture(work: Path) -> list[Path]:
     project = demo_project()
     os.environ.update(PS1="demo@terminal:~/project$ ", HOME=str(project.parent), HISTFILE=os.devnull,
                       USER="demo", LOGNAME="demo")
-    from mindas_terminal import home, shells
-    from mindas_terminal.app import MindasTerminal
-    from mindas_terminal.config import Settings
+    from galadyas_terminal import home, shells
+    from galadyas_terminal.app import GaladyasTerminal
+    from galadyas_terminal.config import Settings
 
     home.system_line = lambda: "Linux  ·  8 CPUs, 16.0 GB RAM"
     found = shells.detect()
@@ -97,7 +97,7 @@ async def capture(work: Path) -> list[Path]:
     sample = [demo_bash, shells.Shell("zsh", ("zsh",)), shells.Shell("WSL: Ubuntu", ("wsl",)),
               shells.Shell("PowerShell 7", ("pwsh",))]
     settings = Settings(remember_history=False)
-    app = MindasTerminal(demo_bash, available=sample, cwd=str(project), settings=settings)
+    app = GaladyasTerminal(demo_bash, available=sample, cwd=str(project), settings=settings)
     shots: list[Path] = []
 
     def shot(name: str) -> None:

@@ -6,8 +6,8 @@ a pane layout, aliases and the task manager. Mix freely; many people work across
 ## DevOps and cloud engineers
 
 ```bash
-mindas-terminal --profile devops
-eval "$(mindas-terminal --aliases bash)"
+galadyas-terminal --profile devops
+eval "$(galadyas-terminal --aliases bash)"
 ```
 
 - **Layout:** left pane for work, `prefix "` below it for `kubectl get pods -w` or `docker compose logs -f`.
@@ -19,7 +19,7 @@ eval "$(mindas-terminal --aliases bash)"
 ## HPC users and administrators
 
 ```bash
-mindas-terminal --profile hpc
+galadyas-terminal --profile hpc
 ```
 
 - **Layout:** one tab per cluster (`prefix c`, `ssh login.cluster`), `prefix ,` to name it.
@@ -32,7 +32,7 @@ mindas-terminal --profile hpc
 ## AI and ML engineers
 
 ```bash
-mindas-terminal --profile ai
+galadyas-terminal --profile ai
 ```
 
 - **Layout:** training on the left, `prefix %` and `nvidia-smi -l 1` (alias `gpuw`) on the right, `prefix "`
@@ -44,7 +44,7 @@ mindas-terminal --profile ai
 ## Data engineers
 
 ```bash
-mindas-terminal --profile data-eng
+galadyas-terminal --profile data-eng
 ```
 
 - **Toolkit:** `parquet schema`, `csv to parquet`, `table sizes`, `json lines`.
@@ -54,7 +54,7 @@ mindas-terminal --profile data-eng
 ## Data scientists
 
 ```bash
-mindas-terminal --profile data-sci
+galadyas-terminal --profile data-sci
 ```
 
 - **Layout:** `prefix c` for a JupyterLab tab (*Start JupyterLab* in the toolkit), another for git.
@@ -64,7 +64,7 @@ mindas-terminal --profile data-sci
 ## Cybersecurity (defenders and authorised testers)
 
 ```bash
-mindas-terminal --profile security
+galadyas-terminal --profile security
 ```
 
 - **Toolkit:** `listening services`, `tls certificate`, `file hash`, `verify a signature`, `failed logins`,
@@ -78,7 +78,7 @@ mindas-terminal --profile security
 ## IT support and system administrators
 
 ```bash
-mindas-terminal --profile linux        # or --profile windows on Windows
+galadyas-terminal --profile linux        # or --profile windows on Windows
 ```
 
 - **Windows:** `prefix g` then `stopped services`, `system errors`, `system files`, `repair`, `who is using a port`.
@@ -90,7 +90,7 @@ mindas-terminal --profile linux        # or --profile windows on Windows
 ## Networking
 
 ```bash
-mindas-terminal --profile network
+galadyas-terminal --profile network
 ```
 
 - **Toolkit:** `reachable`, `path to a host`, `dns`, `tcp port open`, `http headers`.
@@ -99,7 +99,7 @@ mindas-terminal --profile network
 ## IT project managers and team leads
 
 ```bash
-mindas-terminal --profile pm
+galadyas-terminal --profile pm
 ```
 
 - **Toolkit:** `commits this week`, `release notes`, `open pull requests`, `issues assigned to me`,

@@ -1,4 +1,4 @@
-from mindas_terminal.copymode import CopyMode
+from galadyas_terminal.copymode import CopyMode
 
 LINES = ["alpha beta", "gamma Delta", "", "error: disk full", "done"]
 

@@ -1,4 +1,4 @@
-from mindas_terminal import aliases, toolkit
+from galadyas_terminal import aliases, toolkit
 
 
 def test_every_field_has_commands_on_both_platforms():

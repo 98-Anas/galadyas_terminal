@@ -67,7 +67,7 @@ countries. See [Security](Security).
 
 ## Adding commands
 
-Toolkits are plain data in `src/mindas_terminal/toolkit.py`. Each entry is one line:
+Toolkits are plain data in `src/galadyas_terminal/toolkit.py`. Each entry is one line:
 
 ```python
 T("hpc", "Why a job is pending", "squeue -j <jobid> -o '%i %T %r'"),
@@ -75,4 +75,4 @@ T("hpc", "Why a job is pending", "squeue -j <jobid> -o '%i %T %r'"),
 
 Fields: field key, title (what it does, in plain words), command, optional note, optional platform
 (`any`, `linux` or `windows`). Run `uv run python tools/gen_docs.py` to refresh the reference page, then the
-tests. Contributions for new fields are welcome; see [Contributing](https://github.com/98-Anas/mindas_terminal/blob/main/CONTRIBUTING.md).
+tests. Contributions for new fields are welcome; see [Contributing](https://github.com/98-Anas/galadyas_terminal/blob/main/CONTRIBUTING.md).

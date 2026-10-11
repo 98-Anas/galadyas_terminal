@@ -1,26 +1,26 @@
 # Aliases
 
-mindas terminal ships a set of short commands and helper functions for **bash/zsh** and **PowerShell**. They
+galadyas terminal ships a set of short commands and helper functions for **bash/zsh** and **PowerShell**. They
 are **opt-in**: the app never edits your shell profile. You print them, read them, and add them yourself.
 
 ## Try, then keep
 
 ```bash
 # bash or zsh
-mindas-terminal --aliases bash | less          # read first
-eval "$(mindas-terminal --aliases bash)"       # use in this shell only
-echo 'eval "$(mindas-terminal --aliases bash)"' >> ~/.bashrc     # keep
+galadyas-terminal --aliases bash | less          # read first
+eval "$(galadyas-terminal --aliases bash)"       # use in this shell only
+echo 'eval "$(galadyas-terminal --aliases bash)"' >> ~/.bashrc     # keep
 ```
 
 ```powershell
 # PowerShell
-mindas-terminal --aliases powershell | more
-mindas-terminal --aliases powershell | Out-String | Invoke-Expression
-Add-Content $PROFILE 'mindas-terminal --aliases powershell | Out-String | Invoke-Expression'
+galadyas-terminal --aliases powershell | more
+galadyas-terminal --aliases powershell | Out-String | Invoke-Expression
+Add-Content $PROFILE 'galadyas-terminal --aliases powershell | Out-String | Invoke-Expression'
 ```
 
 To stop using them, remove that line. To freeze a reviewed copy instead of loading them each time:
-`mindas-terminal --aliases bash > ~/.mindas-aliases.sh` and `source ~/.mindas-aliases.sh` from your profile.
+`galadyas-terminal --aliases bash > ~/.galadyas-aliases.sh` and `source ~/.galadyas-aliases.sh` from your profile.
 
 ## Linux habits on Windows
 

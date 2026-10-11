@@ -2,10 +2,10 @@ import asyncio
 
 import pytest
 
-from mindas_terminal import shells
-from mindas_terminal.app import MindasTerminal
-from mindas_terminal.config import Settings
-from mindas_terminal.widget import TerminalPane
+from galadyas_terminal import shells
+from galadyas_terminal.app import GaladyasTerminal
+from galadyas_terminal.config import Settings
+from galadyas_terminal.widget import TerminalPane
 
 NO_HOME = Settings(show_home=False, remember_history=False)
 
@@ -22,7 +22,7 @@ async def wait(pane, needle, timeout=20):
 
 
 async def test_tabs_splits_prefix_and_copy_mode():
-    app = MindasTerminal(SHELL, settings=NO_HOME)
+    app = GaladyasTerminal(SHELL, settings=NO_HOME)
     async with app.run_test(size=(120, 36)) as pilot:
         await asyncio.sleep(1.5)
         assert len(app.all_panes()) == 1
@@ -53,11 +53,11 @@ async def test_tabs_splits_prefix_and_copy_mode():
 
 
 async def test_multiline_paste_asks_first():
-    app = MindasTerminal(SHELL, settings=NO_HOME)
+    app = GaladyasTerminal(SHELL, settings=NO_HOME)
     async with app.run_test(size=(100, 30)) as pilot:
         await asyncio.sleep(1.0)
         pane = app.current_pane()
-        from mindas_terminal.screen import BRACKETED_PASTE
+        from galadyas_terminal.screen import BRACKETED_PASTE
         sent = []
         pane.write = sent.append
         pane.screen_model.mode.add(BRACKETED_PASTE)          # the shell protects pastes: wrapped, no question
@@ -73,7 +73,7 @@ async def test_multiline_paste_asks_first():
 
 
 async def test_task_manager_opens_and_lists():
-    app = MindasTerminal(SHELL, settings=NO_HOME)
+    app = GaladyasTerminal(SHELL, settings=NO_HOME)
     async with app.run_test(size=(140, 40)) as pilot:
         await asyncio.sleep(1.0)
         await pilot.press("ctrl+b", "t")
@@ -90,7 +90,7 @@ async def test_task_manager_opens_and_lists():
 
 
 async def test_toolkit_inserts_without_running():
-    app = MindasTerminal(SHELL, profile="network", settings=NO_HOME)
+    app = GaladyasTerminal(SHELL, profile="network", settings=NO_HOME)
     async with app.run_test(size=(140, 40)) as pilot:
         await asyncio.sleep(1.0)
         pane = app.current_pane()
@@ -106,7 +106,7 @@ async def test_toolkit_inserts_without_running():
 
 
 async def test_home_window_opens_a_shell_by_click():
-    app = MindasTerminal(SHELL, settings=Settings(remember_history=False))
+    app = GaladyasTerminal(SHELL, settings=Settings(remember_history=False))
     async with app.run_test(size=(120, 40)) as pilot:
         await pilot.pause()
         assert type(app.screen).__name__ == "HomeScreen"
@@ -117,7 +117,7 @@ async def test_home_window_opens_a_shell_by_click():
 
 
 async def test_home_tools_and_manual_navigation():
-    app = MindasTerminal(SHELL, settings=Settings(remember_history=False))
+    app = GaladyasTerminal(SHELL, settings=Settings(remember_history=False))
     async with app.run_test(size=(120, 40)) as pilot:
         await pilot.pause()
         await pilot.click("#tool-manual")
@@ -128,16 +128,16 @@ async def test_home_tools_and_manual_navigation():
         assert screen.page == "Copy-Mode" and screen.history == ["Home"]
         await pilot.press("b")
         assert screen.page == "Home"
-        from mindas_terminal import manual
+        from galadyas_terminal import manual
         assert "Security" in manual.search("bidi overrides")
         await pilot.press("escape")
         assert type(app.screen).__name__ == "HomeScreen"
 
 
 async def test_status_bar_hints_borders_and_modes():
-    from mindas_terminal.app import MODE_HINTS
+    from galadyas_terminal.app import MODE_HINTS
 
-    app = MindasTerminal(SHELL, settings=NO_HOME)
+    app = GaladyasTerminal(SHELL, settings=NO_HOME)
     async with app.run_test(size=(140, 36)) as pilot:
         await asyncio.sleep(1.0)
         assert app.current_pane().has_class("solo")             # one pane: no border, like a plain terminal
@@ -159,7 +159,7 @@ async def test_status_bar_hints_borders_and_modes():
 
 
 async def test_autocomplete_suggests_and_accepts():
-    app = MindasTerminal(SHELL, settings=NO_HOME)
+    app = GaladyasTerminal(SHELL, settings=NO_HOME)
     async with app.run_test(size=(120, 30)) as pilot:
         await asyncio.sleep(1.0)
         app.history.add("echo AUTOCOMPLETE-WORKS")

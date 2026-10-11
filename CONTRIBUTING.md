@@ -5,7 +5,7 @@ Thank you for helping. Bug reports, documentation fixes, new toolkit commands an
 ## Set up
 
 ```bash
-git clone https://github.com/98-Anas/mindas_terminal && cd mindas_terminal
+git clone https://github.com/98-Anas/galadyas_terminal && cd galadyas_terminal
 uv sync
 uv run pytest
 ```
@@ -27,7 +27,7 @@ Tests start real shells: on Windows, Git Bash is used when installed; on Linux, 
 
 ## Adding toolkit commands
 
-Edit `src/mindas_terminal/toolkit.py`:
+Edit `src/galadyas_terminal/toolkit.py`:
 
 ```python
 T("devops", "Restart a deployment", "kubectl rollout restart deployment/<name> -n <namespace>"),

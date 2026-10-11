@@ -1,7 +1,7 @@
-# mindas terminal
+# galadyas terminal
 
 ![status: work in progress](https://img.shields.io/badge/status-work%20in%20progress-orange)
-![version 0.1.0](https://img.shields.io/badge/version-0.3.0-blue)
+![version 0.4.0](https://img.shields.io/badge/version-0.4.0-blue)
 ![license: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![platforms: Windows | Linux](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux-informational)
 ![python 3.11+](https://img.shields.io/badge/python-3.11%2B-informational)
@@ -65,8 +65,8 @@ IT support and project management.
 Requires Python 3.11 or newer and [uv](https://docs.astral.sh/uv/) (or pipx).
 
 ```bash
-uv tool install git+https://github.com/98-Anas/mindas_terminal
-mindas-terminal
+uv tool install git+https://github.com/98-Anas/galadyas_terminal
+galadyas-terminal
 ```
 
 On Windows, install [Git for Windows](https://git-scm.com/download/win) first to get bash; run the app in
@@ -90,11 +90,11 @@ Windows Terminal for the best result. Full instructions, including offline insta
 | Quit | `Ctrl+Q` |
 
 ```bash
-mindas-terminal --profile hpc               # your field first in the toolkits
-mindas-terminal --shell powershell          # a specific shell
-mindas-terminal --theme contrast            # high contrast
-eval "$(mindas-terminal --aliases bash)"    # try the aliases in bash
-mindas-terminal --init-config               # create a settings file
+galadyas-terminal --profile hpc               # your field first in the toolkits
+galadyas-terminal --shell powershell          # a specific shell
+galadyas-terminal --theme contrast            # high contrast
+eval "$(galadyas-terminal --aliases bash)"    # try the aliases in bash
+galadyas-terminal --init-config               # create a settings file
 ```
 
 ## For your field
@@ -130,7 +130,7 @@ The full documentation is in [docs/](docs/Home.md), also published as the projec
 
 ## Security and ethical use
 
-mindas terminal opens no network connections, sends no telemetry and keeps scrollback in memory only. It
+galadyas terminal opens no network connections, sends no telemetry and keeps scrollback in memory only. It
 removes control and invisible characters from pastes, asks before a paste would run several commands, never
 echoes attacker-controlled data back to your shell, and never looks up programs in the current folder.
 Details and the threat model: [Security](docs/Security.md).
@@ -148,7 +148,7 @@ Measured with 100,000 lines through bash: 10,000 to 15,500 lines per second on W
 ## Development
 
 ```bash
-git clone https://github.com/98-Anas/mindas_terminal && cd mindas_terminal
+git clone https://github.com/98-Anas/galadyas_terminal && cd galadyas_terminal
 uv sync
 uv run pytest                          # unit, screen-model and app tests with real shells
 uv run python tools/e2e.py             # end-to-end checks: throughput, vim, Ctrl+C, resize

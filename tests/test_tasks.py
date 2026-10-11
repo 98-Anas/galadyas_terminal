@@ -1,6 +1,6 @@
 import os
 
-from mindas_terminal import tasks
+from galadyas_terminal import tasks
 
 
 def P(pid, ppid=1, name="x", cpu=0.0, rss=0, cmd="", user="u", gpu=0):

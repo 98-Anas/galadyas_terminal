@@ -22,13 +22,13 @@ TIPS = [
     "Ctrl+B then g finds a command for your field; it is typed, never run.",
     "Ctrl+B then t shows which process holds your GPU memory (sort with g).",
     "Ctrl+B then z zooms a pane; again to restore the layout.",
-    "mindas-terminal --aliases list shows 89 helpers such as mkcd, extract and sq.",
+    "galadyas-terminal --aliases list shows 89 helpers such as mkcd, extract and sq.",
     "In copy mode, V selects whole lines: handy for copying a stack trace.",
     "Ctrl+B then : opens the command palette: themes, profiles, shells, settings.",
     "The task manager's f key shows only what this terminal started.",
     "Every toolkit placeholder is quoted for you, so values with spaces stay one argument.",
     "Clicking the words in the status bar runs them: tab, split, tools, tasks, manual.",
-    "Ctrl+B then m opens this manual offline; man pages: mindas-terminal --man.",
+    "Ctrl+B then m opens this manual offline; man pages: galadyas-terminal --man.",
 ]
 
 
@@ -85,7 +85,7 @@ class HomeScreen(Screen[Shell | None]):
     def compose(self) -> ComposeResult:
         with Vertical(id="home"):
             logo = Text()
-            logo.append("mindas", style="bold #7aa2ff")
+            logo.append("galadyas", style="bold #7aa2ff")
             logo.append(" terminal", style="bold #e6e9f5")
             yield Static(logo, id="logo")
             yield Static(f"Cross-platform terminal workspace  ·  version {__version__}", id="tag")

@@ -76,7 +76,7 @@ class ManualScreen(Screen[None]):
         self.history: list[str] = []
 
     def compose(self) -> ComposeResult:
-        yield Static("mindas terminal manual   click a page or a link   / search   b back   Esc close", id="man-head")
+        yield Static("galadyas terminal manual   click a page or a link   / search   b back   Esc close", id="man-head")
         with Horizontal():
             with Vertical(id="man-side"):
                 yield Input(placeholder="search the manual")
@@ -109,7 +109,7 @@ class ManualScreen(Screen[None]):
         self.query_one("#man-doc", Markdown).update(read(page))
         self.query_one("#man-body").scroll_home(animate=False)
         self.query_one("#man-head", Static).update(
-            f"mindas terminal manual  >  {title(page)}   click a link to follow it   / search   b back   Esc close")
+            f"galadyas terminal manual  >  {title(page)}   click a link to follow it   / search   b back   Esc close")
 
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
         if event.option.id:

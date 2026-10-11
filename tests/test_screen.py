@@ -1,6 +1,6 @@
 import pyte
 
-from mindas_terminal.screen import TerminalScreen as TolerantScreen, clean_title
+from galadyas_terminal.screen import TerminalScreen as TolerantScreen, clean_title
 
 
 def feed(screen, data):
@@ -58,7 +58,7 @@ def test_hostile_output_cannot_answer_back_or_crash():
                "\x1b[99999999C" "\x1b[99999999;99999999H" "\x1b[?3h" "\x1bP+q544e\x1b\\" "\x1b[8;9999;9999t"
                "\x1b[>4;1m" "\x9b31m" + "A" * 10000)
     pyte.Stream(s).feed(hostile)
-    from mindas_terminal.screen import SAFE_REPLY
+    from galadyas_terminal.screen import SAFE_REPLY
     assert replies and all(SAFE_REPLY.fullmatch(r) for r in replies)
     assert not any("evil" in r or "52;" in r for r in replies)
     assert "\x1b" not in s.title and "evil" in s.title

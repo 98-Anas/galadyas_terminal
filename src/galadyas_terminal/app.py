@@ -1,4 +1,4 @@
-"""mindas terminal: tabs and split panes running real shells, with tmux-style keys and vim-style copy mode."""
+"""galadyas terminal: tabs and split panes running real shells, with tmux-style keys and vim-style copy mode."""
 
 from __future__ import annotations
 
@@ -95,7 +95,7 @@ class TerminalCommands(Provider):
     """Command palette entries: every action plus a new tab for each detected shell."""
 
     def _commands(self):
-        app: MindasTerminal = self.app  # type: ignore[assignment]
+        app: GaladyasTerminal = self.app  # type: ignore[assignment]
         items = [
             ("New tab", app.action_new_tab, "Open a tab with the default shell"),
             ("Split right", partial(app.action_split, "right"), "Split the current pane side by side"),
@@ -138,8 +138,8 @@ class TerminalCommands(Provider):
                 yield Hit(score, matcher.highlight(name), cb, help=help_text)
 
 
-class MindasTerminal(App[None]):
-    TITLE = "mindas terminal"
+class GaladyasTerminal(App[None]):
+    TITLE = "galadyas terminal"
     COMMANDS = {TerminalCommands}
     CSS = """
     Screen { layers: base; }
@@ -645,12 +645,12 @@ class MindasTerminal(App[None]):
 
 
 # Short alias used by tools/e2e.py.
-TerminalApp = MindasTerminal
+TerminalApp = GaladyasTerminal
 
 
 def main(argv: list[str] | None = None) -> int:
     settings, warnings = config.load()
-    p = argparse.ArgumentParser(prog="mindas-terminal",
+    p = argparse.ArgumentParser(prog="galadyas-terminal",
                                 description="A universal terminal for Windows and Linux: tabs, splits, copy mode, "
                                             "task manager, toolkits for every field. Bash first everywhere.",
                                 epilog=f"Settings file: {config.path()}  (command-line options win)")
@@ -668,10 +668,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--init-config", action="store_true", help="write a settings file with the defaults and exit")
     p.add_argument("--no-home", action="store_true", help="start in a shell instead of the home window")
     p.add_argument("--man", action="store_true", help="print the manual page (roff) and exit")
-    p.add_argument("--version", action="version", version=f"mindas-terminal {__version__}")
+    p.add_argument("--version", action="version", version=f"galadyas-terminal {__version__}")
     args = p.parse_args(argv)
     for w in warnings:
-        print(f"mindas-terminal: {w}", file=sys.stderr)
+        print(f"galadyas-terminal: {w}", file=sys.stderr)
     if args.man:
         from . import manpage
 
@@ -709,7 +709,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.theme:
         settings = config.replace(settings, theme=args.theme)
     scrollback = args.scrollback if args.scrollback is not None else settings.scrollback
-    MindasTerminal(shell, prefix=args.prefix or settings.prefix, scrollback=min(max(scrollback, 0), 1_000_000), cwd=args.cwd,
+    GaladyasTerminal(shell, prefix=args.prefix or settings.prefix, scrollback=min(max(scrollback, 0), 1_000_000), cwd=args.cwd,
                    available=found, profile=args.profile, settings=settings).run()
     return 0
 

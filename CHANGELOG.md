@@ -3,6 +3,21 @@
 All notable changes are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.4.0] - 2026-10-11
+
+galadyas_terminal is the new name of this project, part of the galadyas series of open projects.
+
+### Changed
+
+- Project, package and command renamed from mindas_terminal / `mindas-terminal` to galadyas_terminal /
+  `galadyas-terminal`. The repository moved to github.com/98-Anas/galadyas_terminal; the old address redirects.
+- Settings now live in a `galadyas-terminal` folder. On first start your existing `mindas-terminal` settings
+  are copied over automatically.
+
+### Deprecated
+
+- The `mindas-terminal` command still works as an alias and will be removed in a later release.
+
 ## [0.3.0] - 2026-10-11
 
 A cleaner, calmer interface, shaped by how people use tmux and Zellij.

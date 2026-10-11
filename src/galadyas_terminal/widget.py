@@ -59,7 +59,7 @@ def _style(fg: str, bg: str, bold: bool, italics: bool, underscore: bool, revers
 
 def shell_env() -> dict[str, str]:
     env = dict(os.environ)
-    env.update(TERM="xterm-256color", COLORTERM="truecolor", TERM_PROGRAM="mindas-terminal")
+    env.update(TERM="xterm-256color", COLORTERM="truecolor", TERM_PROGRAM="galadyas-terminal")
     return env
 
 

@@ -27,7 +27,7 @@ Your shell's own completion still works: `Tab` goes to the shell as always.
 ## Did you mean
 
 Mistype a command and the shell answers `command not found` (bash) or `is not recognized` (PowerShell,
-cmd). mindas terminal looks for the closest command you use, or a common one, and offers the corrected line:
+cmd). galadyas terminal looks for the closest command you use, or a common one, and offers the corrected line:
 
 ```
 $ gti status
@@ -39,7 +39,7 @@ Corrections only cover small typos (one or two letters, including swapped letter
 
 ## When there is no suggestion
 
-Suggestions pause, rather than guess, when mindas terminal cannot be sure what is on the command line:
+Suggestions pause, rather than guess, when galadyas terminal cannot be sure what is on the command line:
 
 - after cursor keys, Tab completion or history search (Up, Ctrl+R) changed the line;
 - inside full-screen programs (vim, less, htop);

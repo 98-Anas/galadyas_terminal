@@ -9,7 +9,7 @@ Locally, usually not. On remote servers, tmux keeps sessions alive when your con
 app cannot do. Use both: tmux on the server, a different prefix here.
 
 **Does it work over SSH?**
-Yes. Run `ssh host` in a pane. You can also install mindas terminal on a Linux server and run it there over SSH.
+Yes. Run `ssh host` in a pane. You can also install galadyas terminal on a Linux server and run it there over SSH.
 
 **Is my data sent anywhere?**
 No. No telemetry, no network access by the app. See [Security](Security).

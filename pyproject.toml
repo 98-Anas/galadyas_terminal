@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mindas-terminal"
-version = "0.3.0"
+name = "galadyas-terminal"
+version = "0.4.0"
 description = "A universal terminal for Windows and Linux, with bash first everywhere"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -29,20 +29,21 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/98-Anas/mindas_terminal"
+Repository = "https://github.com/98-Anas/galadyas_terminal"
 
 [project.scripts]
-mindas-terminal = "mindas_terminal.app:main"
+galadyas-terminal = "galadyas_terminal.app:main"
+mindas-terminal = "galadyas_terminal.app:main"  # former name, kept so existing setups keep working
 
 [dependency-groups]
 dev = ["pytest>=8", "pytest-asyncio>=0.23", "psutil>=5.9"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/mindas_terminal"]
+packages = ["src/galadyas_terminal"]
 
 [tool.hatch.build.targets.wheel.force-include]
 # The manual inside the app reads these pages.
-"docs" = "mindas_terminal/docs"
+"docs" = "galadyas_terminal/docs"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
