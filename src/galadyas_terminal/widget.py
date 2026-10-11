@@ -465,7 +465,7 @@ class TerminalPane(Widget, can_focus=True):
             return None
 
         strip = self._strip(self._rows[r], self._screen.columns, overlay)
-        if y == 0:                                           # position badge, top right, like tmux
+        if y == 0:                                           # position badge, top right
             badge = f" [{cm.row + 1}/{len(cm.lines)}] "
             strip = Strip.join([strip.crop(0, max(width - len(badge), 0)), Strip([Segment(badge, BADGE)])])
         return strip

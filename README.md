@@ -7,7 +7,7 @@
 ![python 3.11+](https://img.shields.io/badge/python-3.11%2B-informational)
 
 **A universal terminal for Windows and Linux, built for people who work in terminals all day.**
-Real shells with bash first everywhere, tabs and split panes with tmux-style keys, vim-style copy mode, a task
+Real shells with bash first everywhere, tabs and split panes with prefix keys, vim-style copy mode, a task
 manager with GPU use, and offline toolkits of curated commands for DevOps, HPC, AI, data, security,
 IT support and project management.
 
@@ -17,7 +17,7 @@ IT support and project management.
 
 - **Same habits on every machine.** On Windows it starts Git Bash (or WSL) by default, and can give PowerShell
   the Linux command names too, so `ls`, `grep`, `which`, `df` and your muscle memory work everywhere.
-- **tmux and vim keys built in.** Splits, zoom, tabs and a searchable scrollback with vim motions, without
+- **Familiar keys built in.** Splits, zoom, tabs and a searchable scrollback with vim motions, without
   installing anything else.
 - **The right command, when you need it.** 109 curated commands across 11 fields, searchable offline,
   inserted at your prompt and never run behind your back.

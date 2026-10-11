@@ -2,11 +2,11 @@
 
 **Is it a terminal emulator or a multiplexer?**
 Both, in one window: it runs shells in pseudo-terminals (like a terminal emulator) inside another terminal
-window, with tabs, splits and copy mode (like tmux). It runs inside Windows Terminal or any Linux terminal.
+window, with tabs, splits and copy mode. It runs inside Windows Terminal or any Linux terminal.
 
-**Do I still need tmux?**
-Locally, usually not. On remote servers, tmux keeps sessions alive when your connection drops, which a local
-app cannot do. Use both: tmux on the server, a different prefix here.
+**Does it keep remote sessions alive if my connection drops?**
+No. It is a local app. To keep work running on a remote server after a disconnect, use a session manager on
+the server, and choose a different prefix key here so the two do not clash.
 
 **Does it work over SSH?**
 Yes. Run `ssh host` in a pane. You can also install galadyas terminal on a Linux server and run it there over SSH.
@@ -35,7 +35,7 @@ app.
 Not tested yet. The Linux code path should work; reports are welcome.
 
 **Why is the default prefix Ctrl+B?**
-It is tmux's default, so many people already know it. Bash uses Ctrl+B to move back one character: press it
+It is a widely used default, so many people already know it. Bash uses Ctrl+B to move back one character: press it
 twice to send it, or choose another prefix.
 
 **How do I reset everything?**

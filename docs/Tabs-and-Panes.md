@@ -47,6 +47,6 @@ Titles are cleaned of control characters and limited to 60 characters (see [Secu
 ## Tips for remote and long-running work
 
 - Running an SSH session inside a pane works normally. For sessions that must survive a disconnect, run
-  `tmux` or `screen` on the remote side; galadyas terminal passes their keys through (choose a different
-  prefix for one of them, for example `--prefix ctrl+a` here and `Ctrl+B` in remote tmux).
+  a session manager on the remote side; galadyas terminal passes their keys through (choose a different
+  prefix for one of them, for example `--prefix ctrl+a` here and `Ctrl+B` on the remote side).
 - On HPC login nodes, keep one pane for `squeue` and one for your work: `prefix "` then `watch -n 30 squeue -u $USER`.

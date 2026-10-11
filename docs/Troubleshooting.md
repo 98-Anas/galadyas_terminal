@@ -27,7 +27,7 @@ Use a host terminal with true colour (Windows Terminal, most Linux terminals). P
 ## Copying does not reach the system clipboard
 
 The system clipboard is set through the host terminal (OSC 52). Windows Terminal supports it. Some Linux
-terminals need it enabled, and tmux needs `set -g set-clipboard on`. Inside galadyas terminal, `prefix ]` pastes
+terminals need it enabled, and a remote session manager may need its clipboard option turned on. Inside galadyas terminal, `prefix ]` pastes
 the last copy regardless.
 
 ## A paste asks for confirmation every time

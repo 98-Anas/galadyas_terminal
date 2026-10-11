@@ -1,4 +1,4 @@
-"""galadyas terminal: tabs and split panes running real shells, with tmux-style keys and vim-style copy mode."""
+"""galadyas terminal: tabs and split panes running real shells, with prefix keys and vim-style copy mode."""
 
 from __future__ import annotations
 
@@ -596,7 +596,7 @@ class GaladyasTerminal(App[None]):
         self._refresh_status()
 
     def _refresh_status(self) -> None:
-        """Zellij-style bar: a mode badge, then the keys that work right now (clickable), then context."""
+        """Status bar: a mode badge, then the keys that work right now (clickable), then context."""
         try:
             left = self.query_one("#status-left", Static)
             hints = self.query_one("#status-hints", Static)

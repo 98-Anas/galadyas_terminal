@@ -45,7 +45,7 @@ def render() -> str:
         ".SH SYNOPSIS", ".B galadyas\\-terminal", "[\\fIOPTIONS\\fR]",
         ".SH DESCRIPTION",
         "Runs real shells (bash first, also on Windows through Git Bash or WSL) in a text interface with tabs "
-        "and split panes controlled by a tmux\\-style prefix key, vim\\-style copy mode over the scrollback, a "
+        "and split panes controlled by a prefix key, vim\\-style copy mode over the scrollback, a "
         "task manager with GPU use, and offline toolkits of curated commands for eleven fields. Toolkit "
         "commands are typed at the prompt and never run automatically.",
         ".PP", "The prefix key is \\fBCtrl+B\\fR by default: press it, release it, then the command key. "
@@ -95,7 +95,7 @@ def render() -> str:
             "Only fixed\\-format replies are sent to programs. Programs are never looked up in the current folder. "
             "Use the security toolkit only on systems you own or are authorised in writing to test."]
     out += [".SH EXIT STATUS", "0 on success, 1 when no shell is found, 2 for an unknown shell name."]
-    out += [".SH SEE ALSO", "\\fBtmux\\fR(1), \\fBvim\\fR(1), \\fBbash\\fR(1). The full manual is inside the app "
+    out += [".SH SEE ALSO", "\\fBvim\\fR(1), \\fBbash\\fR(1). The full manual is inside the app "
             "(prefix m) and at https://github.com/98\\-Anas/galadyas_terminal/wiki"]
     out += [".SH AUTHOR", "Anas Ayman Elgallad."]
     return "\n".join(out) + "\n"

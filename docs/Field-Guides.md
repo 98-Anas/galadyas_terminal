@@ -26,7 +26,7 @@ galadyas-terminal --profile hpc
 - **Toolkit:** `pending`, `sacct`, `interactive gpu`, `partitions`, `rsync results`.
 - **Aliases:** `sq` (your queue, readable), `sgpu` (interactive GPU shell), `sacct1`, `sfree`.
 - **Copy mode:** `prefix [` and `/error` in long job logs; `V` `y` to copy a failing line into a ticket.
-- **Remote persistence:** run `tmux` on the login node for jobs you must reattach to; use `--prefix ctrl+a`
+- **Remote persistence:** run a session manager on the login node for jobs you must reattach to; use `--prefix ctrl+a`
   here so both prefixes work.
 
 ## AI and ML engineers
@@ -111,5 +111,5 @@ galadyas-terminal --profile pm
 ## Students and learners
 
 - Open the toolkits and read the commands for a field you are learning: each one says what it does.
-- Use the [Keyboard Reference](Keyboard-Reference) as practice for tmux and vim habits that transfer to
+- Use the [Keyboard Reference](Keyboard-Reference) as practice for keyboard habits that transfer to
   servers everywhere.

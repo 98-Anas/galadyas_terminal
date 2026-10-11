@@ -20,12 +20,12 @@ galadyas_terminal is the new name of this project, part of the galadyas series o
 
 ## [0.3.0] - 2026-10-11
 
-A cleaner, calmer interface, shaped by how people use tmux and Zellij.
+A cleaner, calmer interface, shaped by how people work in the terminal every day.
 
 ### Changed
 
 - Status bar shows the mode (NORMAL, PREFIX, COPY, ZOOM) and the keys that work right now, as clickable key
-  chips, in the style users praise in Zellij. It replaces the fixed word list and the CPU and RAM readout.
+  chips. It replaces the fixed word list and the CPU and RAM readout.
 - A tab with one pane shows it without a border, like a plain terminal; borders appear when you split.
 - Compact one-line tab bar.
 - Home window: simple title, no host name, calmer focus style.
@@ -59,7 +59,7 @@ First usable version.
 
 - Real shells in pseudo-terminals: ConPTY on Windows (Git Bash first, MSYS2, WSL, PowerShell, cmd) and
   POSIX pseudo-terminals on Linux (bash, zsh, fish, sh).
-- Tabs and split panes with a tmux-style prefix key (Ctrl+B by default): split right or down, move, zoom,
+- Tabs and split panes with a prefix key (Ctrl+B by default): split right or down, move, zoom,
   rename, close with confirmation.
 - Scrollback (10,000 lines per pane by default) and vim-style copy mode with motions, smartcase search,
   character and line selection, clipboard and an internal paste buffer.

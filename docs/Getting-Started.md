@@ -30,7 +30,7 @@ Type commands as usual. Everything you know from your shell still works.
 ## 2. The prefix key
 
 Terminal programs need almost every key, so the terminal's own commands start with a **prefix key**:
-press **Ctrl+B**, release it, then press the command key. This is the same idea as tmux.
+press **Ctrl+B**, release it, then press the command key.
 
 | Try | Result |
 |---|---|
