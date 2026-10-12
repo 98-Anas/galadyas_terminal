@@ -1,6 +1,6 @@
 # galadyas terminal
 
-![status: work in progress](https://img.shields.io/badge/status-work%20in%20progress-orange)
+![status: under development](https://img.shields.io/badge/status-under%20development-orange)
 ![version 0.4.0](https://img.shields.io/badge/version-0.4.0-blue)
 ![license: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)
 ![platforms: Windows | Linux](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux-informational)
@@ -10,6 +10,10 @@
 Real shells with bash first everywhere, tabs and split panes with prefix keys, vim-style copy mode, a task
 manager with GPU use, and offline toolkits of curated commands for DevOps, HPC, AI, data, security,
 IT support and project management.
+
+[![Watch the galadyas_terminal launch film](docs/media/galadyas_terminal_launch.jpg)](docs/media/galadyas_terminal_launch.mp4)
+
+*Watch the launch film (30 s). Part of the [galadyas series](https://github.com/98-Anas/galadyas) of open-source projects.*
 
 ![Home window](docs/images/home.png)
 
